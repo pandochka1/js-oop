@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Массивы — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Одномерные массивы</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript — массив, индексы, методы, перебор</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#theory">Теория</a>
+    <a href="#examples">Примеры</a>
+    <a href="#tasks">Задачи</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕОРИЯ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="theory"><div class="bar"></div><h2>Теория</h2></div>
+
+  <details class="theory" open>
+    <summary>Что такое массив <span class="src">learn.javascript.ru/array</span></summary>
+    <div class="theory-body">
+      <p>Массив — это упорядоченная коллекция значений. В отличие от простых переменных, которые хранят одно значение, массив хранит <strong>набор значений под одним именем</strong>.</p>
+      <p>Представьте ящик с пронумерованными ячейками: каждая ячейка — это один элемент массива, а её номер — индекс.</p>
+      <p>Создать массив можно с помощью квадратных скобок:</p>
+      <pre class="code">let scores = [85, 90, 78, 92];
+let names = ["Анна", "Пётр", "Мария"];
+let empty = [];           // пустой массив</pre>
+      <p>Массив может хранить данные любых типов — числа, строки, логические значения, а также смешанные данные:</p>
+      <pre class="code">let mixed = [12, "apple", true, 3.14, false];</pre>
+      <p>В нашей практике чаще всего встречаются массивы чисел (результаты измерений, оценки, значения датчиков) и массивы строк (имена файлов, адреса, логи).</p>
+      <p>Каждый элемент массива имеет <strong>индекс</strong> — номер позиции. Нумерация начинается с 0:</p>
+      <pre class="code">//  индексы:   [0]   [1]   [2]   [3]
+let arr = [10,   20,   30,   40];
+arr[0];    // 10 — первый элемент
+arr[2];    // 30 — третий элемент</pre>
+      <p>Начинающим кажется странным, что первый элемент имеет индекс 0, а не 1. Это особенность большинства языков программирования: индекс — это <em>смещение</em> от начала массива. Нулевое смещение — первый элемент, смещение на 1 — второй и так далее.</p>
+      <p>Длина массива хранится в свойстве <code class="inline">length</code>. Последний элемент всегда имеет индекс <code class="inline">arr.length - 1</code>:</p>
+      <pre class="code">let arr = [10, 20, 30];
+arr.length;        // 3
+arr[arr.length - 1]; // 30 — последний элемент</pre>
+      <p>Это свойство можно читать как обычное значение, но важно понимать: <code class="inline">length</code> — это не количество элементов, которые вы пересчитали вручную, а встроенное свойство, которое JavaScript автоматически поддерживает при добавлении и удалении элементов.</p>
+      <p>Важно: если обратиться к несуществующему индексу, получим <code class="inline">undefined</code>, а не ошибку:</p>
+      <pre class="code">let arr = [10, 20, 30];
+console.log(arr[10]);  // undefined</pre>
+      <p>Это поведение отличается от многих других языков, где обращение за границы вызывает исключение. В JavaScript такая запись просто вернёт <code class="inline">undefined</code> — что иногда приводит к неявным ошибкам, если не проверять границы индекса.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Запись и изменение элементов</summary>
+    <div class="theory-body">
+      <p>Элементу массива можно присвоить новое значение, обратившись к нему по индексу:</p>
+      <pre class="code">let arr = [10, 20, 30];
+arr[1] = 99;
+console.log(arr);   // [10, 99, 30]</pre>
+      <p>Так можно добавлять новые элементы за пределами текущей длины:</p>
+      <pre class="code">let arr = [10, 20];
+arr[2] = 30;    // элемент с индексом 2 добавлен
+console.log(arr.length);   // 3</pre>
+      <p>Запись по индексу — базовая операция, из которой строится работа с массивами. Часто массив заполняют значениями в цикле:</p>
+      <pre class="code">let arr = [];
+for (let i = 0; i < 5; i++) {
+  arr[i] = i * i;   // 0, 1, 4, 9, 16
+}</pre>
+      <p><strong>Массив — это объект.</strong> Поэтому при присваивании переменной передаётся ссылка, а не копия данных:</p>
+      <pre class="code">let a = [1, 2, 3];
+let b = a;      // b ссылается на тот же массив
+b[0] = 99;
+console.log(a); // [99, 2, 3] — a тоже изменился!</pre>
+      <p>Это поведение отличается от простых типов (числа, строки), где присваивание всегда копирует значение:</p>
+      <pre class="code">let x = 5;
+let y = x;      // y — копия числа
+y = 10;
+console.log(x); // 5 — x не изменился</pre>
+      <p>Если нужно получить именно копию массива, используйте <code class="inline">slice()</code> без аргументов или синтаксис распространения <code class="inline">[...arr]</code>:</p>
+      <pre class="code">let a = [1, 2, 3];
+let copy = [...a];   // независимая копия
+copy[0] = 99;
+console.log(a);      // [1, 2, 3] — оригинал не изменился</pre>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Методы добавления и удаления</summary>
+    <div class="theory-body">
+      <p>У массивов есть встроенные методы для работы с началом и концом:</p>
+      <table class="theory-table">
+        <tr><th>Метод</th><th>Действие</th><th>Куда вставляет</th><th>Возвращает</th></tr>
+        <tr><td><code>arr.push(x)</code></td><td>добавляет x</td><td>в конец</td><td>новую длину</td></tr>
+        <tr><td><code>arr.pop()</code></td><td>удаляет последний элемент</td><td>—</td><td>удалённый элемент</td></tr>
+        <tr><td><code>arr.unshift(x)</code></td><td>добавляет x</td><td>в начало</td><td>новую длину</td></tr>
+        <tr><td><code>arr.shift()</code></td><td>удаляет первый элемент</td><td>—</td><td>удалённый элемент</td></tr>
+      </table>
+      <pre class="code">let arr = [10, 20, 30];
+arr.push(40);         // [10, 20, 30, 40]
+arr.pop();            // [10, 20, 30]
+arr.unshift(5);       // [5, 10, 20, 30]
+arr.shift();          // [10, 20, 30]</pre>
+      <p><code class="inline">push</code> и <code class="inline">pop</code> работают быстро — это операции над концом массива. <code class="inline">unshift</code> и <code class="inline">shift</code> сдвигают все элементы и поэтому медленнее на больших массивах.</p>
+      <p>Эти методы <strong>изменяют сам массив</strong> (мутируют его), в отличие от методов вроде <code class="inline">indexOf</code>, которые только читают данные.</p>
+      <p>Типичный паттерн — использовать массив как «список задач»: добавляйте новые элементы через <code class="inline">push()</code>, обрабатывайте и удаляйте через <code class="inline">shift()</code>, получая эффект очереди. Или через <code class="inline">pop()</code> — эффект стека (как «история» действий в редакторе, где возврат к предыдущему состоянию забирает последний элемент).</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Поиск в массиве</summary>
+    <div class="theory-body">
+      <p>Метод <code class="inline">indexOf(x)</code> возвращает индекс первого вхождения элемента или <code class="inline">-1</code>, если элемент не найден:</p>
+      <pre class="code">let arr = [10, 20, 30, 20];
+arr.indexOf(20);   // 1
+arr.indexOf(99);   // -1 — не найден</pre>
+      <p>Метод <code class="inline">includes(x)</code> возвращает <code class="inline">true</code> или <code class="inline">false</code> — есть ли элемент в массиве:</p>
+      <pre class="code">let arr = [10, 20, 30];
+arr.includes(20);   // true
+arr.includes(99);   // false</pre>
+      <p>Важно: <code class="inline">indexOf</code> и <code class="inline">includes</code> используют строгое сравнение <code class="inline">===</code>.</p>
+      <p>Поиск можно реализовать и вручную циклом — это поможет понять, как устроены методы изнутри:</p>
+      <pre class="code">let arr = [10, 20, 30];
+let target = 20;
+let found = -1;
+for (let i = 0; i < arr.length; i++) {
+  if (arr[i] === target) { found = i; break; }
+}
+console.log(found);   // 1</pre>
+      <p>Разница между <code class="inline">indexOf</code> и ручным поиском: <code class="inline">indexOf</code> возвращает индекс <em>первого</em> совпадения и прекращает поиск. Если элементов с одинаковым значением несколько, то для поиска последнего придётся использовать цикл с конца.</p>
+      <p>Зачем проверять результат на <code class="inline">-1</code>? Потому что <code class="inline">-1</code> — это «условное» значение «не найдено». Такая проверка — стандартная практика:</p>
+      <pre class="code">let arr = ["admin", "user", "guest"];
+if (arr.indexOf("hacker") === -1) {
+  console.log("Такого пользователя нет");
+} else {
+  console.log("Пользователь найден");
+}</pre>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Перебор массива циклом</summary>
+    <div class="theory-body">
+      <p>Самый универсальный способ пройти по всем элементам — цикл <code class="inline">for</code> с индексом:</p>
+      <pre class="code">let arr = [10, 20, 30];
+for (let i = 0; i < arr.length; i++) {
+  console.log('Индекс ' + i + ': ' + arr[i]);
+}</pre>
+      <p>Цикл начинается с нулевого индекса и продолжается, пока индекс меньше <code class="inline">length</code>. Это гарантирует, что будут обработаны все элементы.</p>
+      <p>Для обхода, когда индекс не нужен, удобнее <code class="inline">for...of</code> — он перебирает значения напрямую:</p>
+      <pre class="code">let arr = [10, 20, 30];
+for (let value of arr) {
+  console.log(value);    // 10, 20, 30
+}</pre>
+      <p>Выбирайте цикл по задаче: <code class="inline">for</code> с индексом — если индекс нужен (например, для сравнения соседних элементов); <code class="inline">for...of</code> — если нужно просто «взять каждое значение».</p>
+      <p>Типичный паттерн — накопление результата в отдельной переменной. Так вычисляют сумму, среднее, максимум и другие характеристики массива:</p>
+      <pre class="code">let arr = [10, 20, 30];
+let sum = 0;
+for (let i = 0; i < arr.length; i++) {
+  sum += arr[i];
+}
+console.log(sum);   // 60</pre>
+      <p>По этому же принципу вычисляется среднее арифметическое (<code class="inline">sum / arr.length</code>) и поиск максимума (переменная, которая хранит пока что наибольшее найденное значение).</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Массивы в ИБ повсюду: список IP-адресов в журнале, последовательность пакетов, набор паролей для анализа. Перебор массива циклом — базовый навык для анализа логов и обнаружения аномалий (например, подсчёт частоты запросов по каждому IP).</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Типовые задачи с массивами и подводные камни</summary>
+    <div class="theory-body">
+      <p>Практически любая задача на массивы сводится к одному из базовых действий:</p>
+      <ul>
+        <li><strong>Агрегация</strong> — вычислить одно значение из всех элементов: сумму, максимум, среднее.</li>
+        <li><strong>Поиск</strong> — найти элемент по значению или условию.</li>
+        <li><strong>Фильтрация</strong> — оставить только элементы, удовлетворяющие условию.</li>
+        <li><strong>Преобразование</strong> — построить новый массив на основе старого.</li>
+      </ul>
+      <p>Каждое из этих действий на этом этапе реализуется циклом, и это правильный способ: сначала научиться строить логику вручную, затем пользоваться готовыми методами (<code class="inline">map</code>, <code class="inline">filter</code>, <code class="inline">reduce</code>), которые появятся в следующих темах.</p>
+      <h4>Частая ошибка: выйти за границы</h4>
+      <p>Условие цикла <code class="inline">i &lt; arr.length</code> важно записывать именно так, а не <code class="inline">i &lt;= arr.length</code>. Во втором случае последняя итерация обратится к несуществующему индексу и получит <code class="inline">undefined</code>:</p>
+      <pre class="code">let arr = [10, 20, 30];
+for (let i = 0; i <= arr.length; i++) {
+  console.log(arr[i]);   // 10 20 30 undefined
+}</pre>
+      <h4>Изменение длины внутри цикла</h4>
+      <p>Если в цикле удалять элементы массива, длина будет меняться, и цикл с фиксированным условием будет вести себя неожиданно. Пока вы не изучаете удаление сложными методами, старайтесь не менять длину массива в процессе перебора.</p>
+      <h4>Пустой массив</h4>
+      <p>Если массив пуст (<code class="inline">length = 0</code>), цикл с условием <code class="inline">i &lt; 0</code> не выполнится ни разу — это корректное поведение. Агрегацию нужно предусмотреть: сумма пустого массива — 0, а вот среднее арифметическое (<code class="inline">0 / 0</code>) даст <code class="inline">NaN</code>, что требует проверки.</p>
+    </div>
+  </details>
+
+  <!-- ============================================================ -->
+  <!-- ПРИМЕРЫ С РАЗБОРОМ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>Примеры с пошаговым разбором</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 1</span>
+      <h3>Доступ по индексу</h3>
+    </div>
+    <div class="task-text">
+      Дан массив из пяти чисел. Получить элемент по введённому индексу. Если индекс вне диапазона — сообщить об ошибке.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> перед обращением к элементу проверяем, что индекс находится в пределах <code class="inline">0 .. length-1</code>. Это защищает от ошибок и возврата <code class="inline">undefined</code>.
+    </div>
+    <pre class="code">let arr = [10, 25, 8, 42, 17];
+
+if (idx >= 0 && idx < arr.length) {
+  console.log(arr[idx]);
+} else {
+  console.log("Индекс вне диапазона");
+}</pre>
+    <div class="controls">
+      <div class="field"><label>Индекс</label><input type="number" id="ex1-idx" value="3"></div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 2</span>
+      <h3>Добавление через push и pop</h3>
+    </div>
+    <div class="task-text">
+      Добавить несколько значений в конец массива через <code>push()</code>, затем удалить последний элемент через <code>pop()</code>. Проследим, как меняется длина и содержимое массива.
+    </div>
+    <pre class="code">let arr = [];
+arr.push(5);   // [5]
+arr.push(12);  // [5, 12]
+arr.push(3);   // [5, 12, 3]
+arr.pop();     // [5, 12]</pre>
+    <div class="controls">
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 3</span>
+      <h3>Поиск значения в массиве</h3>
+    </div>
+    <div class="task-text">
+      Найти индекс заданного значения в массиве. Сравним ручной поиск циклом и встроенный <code>indexOf()</code>.
+    </div>
+    <pre class="code">let arr = [3, 7, 1, 9, 4];
+let idx = arr.indexOf(7);   // 1</pre>
+    <div class="controls">
+      <div class="field"><label>Значение</label><input type="number" id="ex3-val" value="7"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 4</span>
+      <h3>Сумма и среднее арифметическое</h3>
+    </div>
+    <div class="task-text">
+      Вычислить сумму и среднее арифметическое элементов массива, используя цикл <code>for</code>. Проследим накопление суммы шаг за шагом.
+    </div>
+    <pre class="code">let arr = [3, 7, 1, 9, 4];
+let sum = 0;
+for (let i = 0; i < arr.length; i++) {
+  sum += arr[i];
+}
+let avg = sum / arr.length;</pre>
+    <div class="controls">
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ЗАДАЧИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    8 задач. В каждой нужно применить массивы в сочетании с условным оператором и/или циклами.
+    Код задач в файл не включен — пишите всё самостоятельно.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Сумма положительных</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив чисел, например [3, -1, 5, -7, 2]. Найти сумму только положительных элементов. Используйте цикл for и условие if (arr[i] &gt; 0).</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Пройдите массив циклом, внутри проверяйте значение каждого элемента. Если оно положительное — прибавляйте к сумме. Отрицательные и нули пропускайте.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Максимум и минимум</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив чисел. Найти максимальный и минимальный элемент без Math.max/Math.min — вручную циклом.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Примите за максимум первый элемент, затем сравнивайте с остальными: если arr[i] &gt; max — обновляйте max. Аналогично для минимума.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Подсчёт чётных</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив чисел. Посчитать, сколько в нём чётных элементов. Используйте arr[i] % 2 === 0.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Введите счётчик, обнулите его. В цикле проверяйте остаток от деления на 2: если 0 — увеличивайте счётчик.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Есть ли заданное значение</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив чисел и некое значение. Определить, есть ли оно в массиве, и вывести его индекс. Реализуйте вручную (без indexOf), затем проверьте решение встроенным методом.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Используйте переменную found = -1. В цикле при совпадении запишите индекс и прервите цикл оператором break. Значение -1 означает «не найдено».</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Разворот массива</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив. Создать новый массив, в котором элементы расположены в обратном порядке. Реализуйте без встроенного reverse().</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Пройтись по исходному массиву с конца и добавить элементы в новый массив через push(). Индекс с конца: arr[arr.length - 1 - i].</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Фильтр по условию</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив чисел. Создать новый массив только из элементов, которые больше заданного порога. Порог вводит пользователь.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">В цикле проверяйте arr[i] &gt; threshold. Если true — добавляйте элемент в новый массив через push(). В результате получите отфильтрованный массив.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">7</span><h3>Сдвиг элементов</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Дан массив и число k. Сдвинуть элементы массива влево на k позиций (элементы в начале переходят в конец). Например, [1,2,3,4,5] при сдвиге на 2 → [3,4,5,1,2].</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Можно в цикле k раз «сдвигать на 1»: сохранить первый элемент, переместить все остальные на позицию назад, записать сохранённый элемент в конец. Либо построить новый массив с индексами (i + k) % length.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">8</span><h3>Анализ лога попыток входа</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Дан массив из 0 и 1 (0 — успешный вход, 1 — неудачная попытка). Найти самую длинную непрерывную серию единиц — то есть максимальное количество неудачных попыток подряд.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Храните текущую длину серии current и лучшую best. При встрече 1 — увеличивайте current, при встрече 0 — сбрасывайте в 0. После каждого шага сохраняйте максимум.</div>
+      </details>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Подсчёт максимальной серии неудачных попыток — это детекция брутфорс-атаки. Если серия длинная, система должна заблокировать аккаунт или IP. Та же логика используется при анализе логов SIEM.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ВОПРОСЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">Ответьте письменно или устно, сверившись с теорией.</p>
+
+  <div class="tasks-list">
+    <div class="task"><div class="task-head"><span class="num">1</span><h3>С какого индекса начинается нумерация элементов массива? Как получить последний элемент?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">2</span><h3>Что возвращает обращение к несуществующему индексу массива?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">3</span><h3>Чем push/pop отличаются от unshift/shift? Какие из них работают быстрее?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">4</span><h3>Что возвращает indexOf, если элемент не найден? Почему выбрано именно такое значение?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">5</span><h3>Чем for (let i...) отличается от for...of при переборе массива?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">6</span><h3>Что произойдёт, если присвоить одну переменную-массив другой? Почему?</h3></div></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ИСТОЧНИКИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Источники</span><h3>Где читать и изучать тему</h3></div>
+    <div class="sources-list">
+      <a href="https://learn.javascript.ru/array" target="_blank"><span class="src-name">learn.javascript.ru — Массивы</span><span class="src-desc">Основы: создание, доступ, перебор, методы.</span></a>
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank"><span class="src-name">MDN — Array (полный справочник)</span><span class="src-desc">Все методы массивов с примерами.</span></a>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code><br>
+      <strong>2.</strong> Для проверки готовых примеров: <code>node arrays.js</code><br>
+      <strong>3.</strong> Для своих задач: создайте файл и запустите: <code>node task.js</code><br><br>
+      Не забудьте: <code>prompt()</code> для ввода, <code>console.log()</code> для вывода.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="arrays.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

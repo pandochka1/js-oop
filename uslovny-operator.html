@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Условный оператор — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+    <span class="icon" id="theme-icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Условный оператор</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#theory">Теория</a>
+    <a href="#examples">Примеры</a>
+    <a href="#tasks">Задачи</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="theory"><div class="bar"></div><h2>Теория</h2></div>
+
+  <details class="theory" open>
+    <summary>Логические типы: Boolean <span class="src">learn.javascript.ru/logical-operators</span></summary>
+    <div class="theory-body">
+
+      <p>Программа — это череда решений. Каждое решение сводится к одному вопросу: <strong>true</strong> (истина) или <strong>false</strong> (ложь)? Именно так компьютер понимает, что делать дальше: выполнить один фрагмент кода или другой.</p>
+
+      <p>Тип <code class="inline">Boolean</code> имеет всего два значения:</p>
+
+      <pre class="code">let isLoggedIn = true;
+let isAdmin = false;</pre>
+
+      <h4>Откуда берутся true и false?</h4>
+      <p>Булевы значения появляются в трёх случаях:</p>
+      <ul>
+        <li><strong>Результат сравнения</strong> — <code class="inline">5 &gt; 3</code> даёт <code class="inline">true</code>, а <code class="inline">10 === "10"</code> — <code class="inline">false</code></li>
+        <li><strong>Приведение типа</strong> — любое значение можно явно превратить в <code class="inline">Boolean</code> через <code class="inline">Boolean(x)</code></li>
+        <li><strong>Неявное приведение в условии</strong> — <code class="inline">if (x)</code> само приводит <code class="inline">x</code> к boolean</li>
+      </ul>
+
+      <p>Неявное приведение — частая неожиданность для начинающих. Когда вы пишете <code class="inline">if (x)</code>, JavaScript смотрит: является ли <code class="inline">x</code> «истинным» (truthy) или «ложным» (falsy)? Всего существует ровно 6 falsy-значений. Всё остальное — truthy.</p>
+
+      <table class="theory-table">
+        <tr><th>Значение</th><th>Boolean(x)</th><th>Falsy?</th></tr>
+        <tr><td><code>false</code></td><td><code>false</code></td><td>да</td></tr>
+        <tr><td><code>0</code></td><td><code>false</code></td><td>да</td></tr>
+        <tr><td><code>""</code> (пустая строка)</td><td><code>false</code></td><td>да</td></tr>
+        <tr><td><code>null</code></td><td><code>false</code></td><td>да</td></tr>
+        <tr><td><code>undefined</code></td><td><code>false</code></td><td>да</td></tr>
+        <tr><td><code>NaN</code></td><td><code>false</code></td><td>да</td></tr>
+        <tr><td>Любое число кроме 0</td><td><code>true</code></td><td>нет</td></tr>
+        <tr><td>Любая непустая строка</td><td><code>true</code></td><td>нет</td></tr>
+        <tr><td>Любой объект (даже <code>{}</code>)</td><td><code>true</code></td><td>нет</td></tr>
+      </table>
+
+      <p><strong>Запомните 6 falsy-значений:</strong> <code class="inline">false</code>, <code class="inline">0</code>, <code class="inline">""</code>, <code class="inline">null</code>, <code class="inline">undefined</code>, <code class="inline">NaN</code>. Это пригодится в каждой второй проверке.</p>
+
+      <div class="kb-note">
+      <div class="kb-bar">Кибербезопасность</div>
+      <div class="kb-body">Путаница между <code class="inline">false</code> и falsy-значениями — частый источник багов. Например, <code class="inline">if (user.role)</code> не отличит строку <code class="inline">""</code> от <code class="inline">undefined</code> — оба falsy. В проверках прав доступа всегда используйте явные сравнения, а не truthy-проверку.</div>
+    </div>
+
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Операторы сравнения <span class="src">learn.javascript.ru/comparison</span></summary>
+    <div class="theory-body">
+
+      <p>Операторы сравнения — это инструмент, которым вы будете пользоваться в каждом втором условии. Результат сравнения всегда <code class="inline">true</code> или <code class="inline">false</code>.</p>
+
+      <h4>Полный список</h4>
+      <pre class="code">a &gt; b    //  больше
+a &lt; b    //  меньше
+a &gt;= b   //  больше или равно
+a &lt;= b   //  меньше или равно
+a == b   //  равно (с приведением типов)
+a === b  //  строго равно (без приведения)
+a != b   //  не равно
+a !== b  //  строго не равно</pre>
+
+      <h4>Строгое vs нестрогое сравнение</h4>
+      <p>Ключевое различие: <code class="inline">==</code> перед сравнением приводит оба операнда к одному типу, а <code class="inline">===</code> — нет. Это порождает неочевидные результаты:</p>
+      <ul>
+        <li><code class="inline">5 == "5"</code> → <code class="inline">true</code> (строка стала числом)</li>
+        <li><code class="inline">5 === "5"</code> → <code class="inline">false</code> (разные типы: number vs string)</li>
+        <li><code class="inline">0 == false</code> → <code class="inline">true</code></li>
+        <li><code class="inline">0 === false</code> → <code class="inline">false</code></li>
+        <li><code class="inline">"" == false</code> → <code class="inline">true</code></li>
+      </ul>
+
+      <h4>Сравнение строк</h4>
+      <p>Строки сравниваются посимвольно (лексикографически, по Unicode-кодам):</p>
+      <ul>
+        <li><code class="inline">"a" &lt; "b"</code> → <code class="inline">true</code></li>
+        <li><code class="inline">"apple" &lt; "banana"</code> → <code class="inline">true</code></li>
+        <li><code class="inline">"5" &gt; "15"</code> → <code class="inline">true</code>! Потому что сравниваются первые символы: '5' (код 53) vs '1' (код 49)</li>
+      </ul>
+      <p>Последний пример — классическая ловушка: строковое сравнение чисел даёт неверный результат. Если вы сравниваете числа — убедитесь, что оба операнда числа, а не строки.</p>
+
+      <h4>Сравнение с NaN и null</h4>
+      <p><code class="inline">NaN</code> (Not-a-Number) — единственное значение в JS, которое не равно самому себе:</p>
+      <pre class="code">NaN === NaN  // false! Никогда так не проверяйте.
+// Используйте isNaN(x) или Number.isNaN(x)</pre>
+      <p><code class="inline">null</code> ведёт себя особо: он равен только <code class="inline">undefined</code> через <code class="inline">==</code>, но не через <code class="inline">===</code>:</p>
+      <pre class="code">null == undefined   // true
+null === undefined  // false</pre>
+
+      <p><strong>Правило профессионала:</strong> всегда используйте <code class="inline">===</code> и <code class="inline">!==</code>. Единственное легитимное исключение — проверка <code class="inline">if (x == null)</code>, которая ловит и <code class="inline">null</code>, и <code class="inline">undefined</code> одновременно.</p>
+
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">В системах аутентификации <code class="inline">==</code> может дать ложно-положительный результат. Например, <code class="inline">1 == true</code> — <code class="inline">true</code>. Если сессионный ключ — число 1, а код ожидает <code class="inline">true</code>, возможна подмена. Только строгое <code class="inline">===</code> гарантирует безопасность.</div>
+      </div>
+
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Условный оператор if / else <span class="src">learn.javascript.ru/ifelse</span></summary>
+    <div class="theory-body">
+
+      <p>Конструкция <code class="inline">if</code> — главный инструмент ветвления. Если условие truthy — выполняется блок, если falsy — пропускается.</p>
+
+      <h4>Базовая форма</h4>
+      <pre class="code">let age = 18;
+
+if (age >= 18) {
+  console.log("Доступ разрешён");
+}</pre>
+
+      <h4>С else и else if</h4>
+      <pre class="code">let hour = 14;
+
+if (hour < 12) {
+  console.log("Доброе утро");
+} else if (hour < 18) {
+  console.log("Добрый день");
+} else {
+  console.log("Добрый вечер");
+}</pre>
+      <p>Цепочка работает последовательно: первое истинное условие выполняет свой блок и завершает всю конструкцию. Остальные проверки пропускаются. Это важно помнить: порядок условий имеет значение.</p>
+
+      <h4>Вложенные if</h4>
+      <p>Условия можно вкладывать друг в друга. Но старайтесь не делать глубже 2–3 уровней — код становится нечитаемым:</p>
+      <pre class="code">if (user) {
+  if (user.role === "admin") {
+    console.log("Полный доступ");
+  } else {
+    console.log("Ограниченный доступ");
+  }
+} else {
+  console.log("Не авторизован");
+}</pre>
+
+      <h4>Особенности приведения в условии</h4>
+      <p>Любое выражение в скобках <code class="inline">if (...)</code> приводится к boolean. Поэтому можно писать лаконичные проверки:</p>
+      <pre class="code">let name = "";
+if (!name) {
+  console.log("Имя не указано");  // "" — falsy, !"" → true
+}
+
+let items = [];
+if (items.length) {
+  console.log("Есть элементы");   // 0 — falsy, блок не выполнится
+}</pre>
+      <p>Но будьте осторожны: <code class="inline">if (items.length)</code> не выполнится при <code class="inline">0</code> элементах. Если 0 — допустимое значение, проверяйте явно: <code class="inline">if (items.length &gt; 0)</code>.</p>
+
+      <h4>Тернарный оператор ? :</h4>
+      <p>Когда нужно выбрать одно из двух значений в одной строке:</p>
+      <pre class="code">let access = user.isAdmin ? "полный" : "ограниченный";
+
+// То же самое через if:
+// let access;
+// if (user.isAdmin) access = "полный";
+// else access = "ограниченный";</pre>
+      <p>Тернарный оператор — это <strong>выражение</strong>, возвращающее значение. Его можно использовать внутри <code class="inline">console.log</code>, при присваивании и в шаблонных строках. Не злоупотребляйте вложенными тернарниками — они сильно ухудшают читаемость.</p>
+
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Типичный паттерн: <code class="inline">if (failedAttempts &gt;= MAX_ATTEMPTS) { account.lock(); }</code>. Пороговые значения (<code class="inline">MAX_ATTEMPTS</code>) всегда выносят в константы — их легче менять и тестировать. Никогда не используйте магические числа в условиях.</div>
+      </div>
+
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Логические операторы <span class="src">learn.javascript.ru/logical-operators</span></summary>
+    <div class="theory-body">
+
+      <p>Три оператора для работы с булевыми значениями. Особенность JS в том, что <code class="inline">&&</code> и <code class="inline">||</code> не всегда возвращают <code class="inline">true/false</code> — они возвращают одно из исходных значений.</p>
+
+      <h4>И (AND) — &amp;&amp;</h4>
+      <p>Вычисляет операнды слева направо. Как только встречает falsy — останавливается и возвращает его. Если все truthy — возвращает последнее:</p>
+      <pre class="code">true && true    // true
+true && false   // false
+false && true   // false (дальше не идёт — короткое замыкание)
+5 && "hello"    // "hello" (оба truthy, вернулся последний)
+null && "ok"    // null (первый falsy — остановка)</pre>
+
+      <h4>ИЛИ (OR) — ||</h4>
+      <p>Тоже идёт слева направо. Как только встречает truthy — останавливается и возвращает его. Если все falsy — возвращает последнее:</p>
+      <pre class="code">true || false   // true (дальше не идёт)
+false || 42     // 42
+0 || "" || 100  // 100 (первый truthy)
+null || 0       // 0 (все falsy, вернулось последнее)</pre>
+
+      <h4>НЕ (NOT) — !</h4>
+      <p>Просто инвертирует: <code class="inline">!true</code> → <code class="inline">false</code>, <code class="inline">!false</code> → <code class="inline">true</code>. Часто используется для проверки «не равно»:</p>
+      <pre class="code">let isBlocked = false;
+if (!isBlocked) {
+  console.log("Можно войти");
+}
+
+let name = "";
+if (!name) {
+  console.log("Имя не указано");
+}</pre>
+
+      <h4>Приоритет (важно!)</h4>
+      <p>Порядок обработки: <code class="inline">!</code> → <code class="inline">&&</code> → <code class="inline">||</code>. Скобки — выше всего:</p>
+      <pre class="code">true || false && false
+// && выше по приоритету: false && false → false
+// потом: true || false → true
+
+(true || false) && false
+// Скобки изменили порядок: true || false → true
+// потом: true && false → false</pre>
+      <p><strong>Совет:</strong> если условие сложнее трёх операндов — ставьте скобки. Код пишется для людей, а не для интерпретатора.</p>
+
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Логические операторы — основа правил обнаружения атак. «Сработать, если больше 5 попыток <strong>И</strong> пользователь не заблокирован» — это <code class="inline">attempts &gt; 5 &amp;&amp; !isBlocked</code>. IDS/IPS системы компилируют такие правила в код, аналогичный этому.</div>
+      </div>
+
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Конструкция switch <span class="src">learn.javascript.ru/switch</span></summary>
+    <div class="theory-body">
+
+      <p>Когда нужно сравнить одну переменную с множеством возможных значений, <code class="inline">switch</code> читается значительно легче, чем длинная цепочка <code class="inline">if-else if</code>.</p>
+
+      <h4>Синтаксис</h4>
+      <pre class="code">let role = "editor";
+
+switch (role) {
+  case "admin":
+    console.log("Полные права");
+    break;
+  case "editor":
+    console.log("Может редактировать");
+    break;
+  case "viewer":
+    console.log("Только чтение");
+    break;
+  default:
+    console.log("Роль не распознана");
+}</pre>
+
+      <h4>Важно про break</h4>
+      <p>Если забыть <code class="inline">break</code> — выполнение «провалится» в следующий case независимо от его условия. Это называется <strong>fall-through</strong>:</p>
+      <pre class="code">switch (2) {
+  case 1:
+    console.log("Один");   // не выполнится
+  case 2:
+    console.log("Два");    // выполнится
+  case 3:
+    console.log("Три");    // И ЭТО ТОЖЕ! Нет break
+}
+// Вывод: "Два", "Три"</pre>
+
+      <p>Иногда fall-through используют осознанно — для группировки case:</p>
+      <pre class="code">switch (code) {
+  case 400:
+  case 403:
+  case 404:
+    console.log("Ошибка клиента");
+    break;
+  case 500:
+  case 502:
+  case 503:
+    console.log("Ошибка сервера");
+    break;
+}</pre>
+
+      <h4>switch(true) — приём для условий</h4>
+      <p>Вместо конкретного значения можно передать <code class="inline">true</code>, а в каждом case написать условие:</p>
+      <pre class="code">switch (true) {
+  case score >= 90:
+    grade = "отлично";
+    break;
+  case score >= 70:
+    grade = "хорошо";
+    break;
+  case score >= 50:
+    grade = "удовлетворительно";
+    break;
+  default:
+    grade = "неудовлетворительно";
+}</pre>
+      <p>Такой подход не хуже <code class="inline">if-else</code> по читаемости и выглядит более структурированным.</p>
+
+      <p><strong>Когда выбрать switch:</strong> когда сравниваете <strong>одну переменную</strong> с 3+ конкретными значениями (строки или числа). Для диапазонов (например, <code class="inline">if (age &gt; 18)</code>) лучше использовать <code class="inline">if-else</code>.</p>
+
+    </div>
+  </details>
+
+  
+  
+  
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>Примеры с пошаговым разбором</h2></div>
+
+  
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 1</span>
+      <h3>Определение знака числа (IF)</h3>
+    </div>
+    <div class="task-text">
+      Запросить у пользователя число и определить, оно <strong>положительное</strong>, <strong>отрицательное</strong> или <strong>ноль</strong>. Используем <code>if / else if / else</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> конструкция <code>if</code> проверяет первое условие. Если число больше нуля — сразу возвращаем «положительное». Если нет — проверяем второе условие: меньше ли нуля? Если и это не сработало — остаётся только вариант «ноль». Порядок проверок важен: более специфичные условия должны быть раньше. Оператор <code>&gt; 0</code> — это сравнение, он возвращает <code>true</code> или <code>false</code>.
+    </div>
+
+    <pre class="code">function signOfNumber(n) {
+  if (n > 0) {
+    return "положительное";
+  } else if (n < 0) {
+    return "отрицательное";
+  } else {
+    return "ноль";
+  }
+}</pre>
+
+    <div class="controls">
+      <div class="field">
+        <label>Введите число</label>
+        <input type="number" id="ex1-val" value="-7">
+      </div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 2</span>
+      <h3>Координатная четверть (вложенный IF)</h3>
+    </div>
+    <div class="task-text">
+      Запросить координаты точки (x, y) и определить номер четверти. Учесть случаи попадания на оси X, Y или в начало координат.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> координатная плоскость делится на 4 четверти. Сначала обрабатываем особые случаи: если обе координаты равны нулю — точка в начале координат. Затем проверяем попадание на оси (одна координата равна нулю). И только после этого — четверти, комбинируя знаки <code>x</code> и <code>y</code> через <code>&amp;&amp;</code>. Чем раньше находится особый случай, тем меньше проверок нужно.
+    </div>
+
+    <pre class="code">function quadrant(x, y) {
+  if (x === 0 && y === 0) {
+    return "начало координат";
+  } else if (x === 0) {
+    return "на оси Y";
+  } else if (y === 0) {
+    return "на оси X";
+  } else if (x > 0 && y > 0) {
+    return "I четверть";
+  } else if (x < 0 && y > 0) {
+    return "II четверть";
+  } else if (x < 0 && y < 0) {
+    return "III четверть";
+  } else {
+    return "IV четверть";
+  }
+}</pre>
+
+    <div class="controls">
+      <div class="field">
+        <label>X</label>
+        <input type="number" id="ex2-x" value="3">
+      </div>
+      <div class="field">
+        <label>Y</label>
+        <input type="number" id="ex2-y" value="-2">
+      </div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+
+    <div class="kb-note">
+      <div class="kb-bar">Кибербезопасность</div>
+      <div class="kb-body">Вложенные условия — типичный паттерн для многоуровневых проверок безопасности: «если запрос пришёл из доверенной сети И если метод POST И если тело не пустое — обработать».</div>
+    </div>
+  </div>
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 3</span>
+      <h3>Калькулятор (SWITCH)</h3>
+    </div>
+    <div class="task-text">
+      Пользователь вводит 2 числа и знак (+ - * /). Реализовать вычисление через <code>switch</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> <code>switch</code> принимает переменную <code>op</code> и ищет среди case подходящее значение. Если находит <code>"+"</code> — выполняет сложение, для <code>"/"</code> — перед делением проверяет, не равен ли делитель нулю. Если ни один case не совпал — срабатывает <code>default</code>. Обратите внимание на <code>break</code>: в этом примере он не нужен, потому что внутри каждого case стоит <code>return</code>, который завершает функцию целиком.
+    </div>
+
+    <pre class="code">function calc(a, op, b) {
+  switch (op) {
+    case "+":
+      return a + b;
+    case "-":
+      return a - b;
+    case "*":
+      return a * b;
+    case "/":
+      if (b === 0) return "ошибка: деление на 0";
+      return a / b;
+    default:
+      return "неизвестная операция";
+  }
+}</pre>
+
+    <div class="controls">
+      <div class="field">
+        <label>Число A</label>
+        <input type="number" id="ex3-a" value="10">
+      </div>
+      <div class="field">
+        <label>Операция</label>
+        <select id="ex3-op">
+          <option>+</option>
+          <option>-</option>
+          <option selected>*</option>
+          <option>/</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Число B</label>
+        <input type="number" id="ex3-b" value="2">
+      </div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 4</span>
+      <h3>Большее из двух чисел (тернарный)</h3>
+    </div>
+    <div class="task-text">
+      Запросить 2 числа и вывести большее из них, используя <code>тернарный оператор ? :</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> тернарный оператор проверяет условие <code>a &gt; b</code>. Если <code>true</code> — возвращает <code>a</code>, если <code>false</code> — возвращает <code>b</code>. Вся конструкция — это выражение, которое возвращает значение, поэтому её можно использовать прямо в <code>return</code>. Для сравнения: та же логика через <code>if</code> заняла бы 4 строки вместо одной.
+    </div>
+
+    <pre class="code">function maxOfTwo(a, b) {
+  return a > b ? a : b;
+}</pre>
+
+    <div class="controls">
+      <div class="field">
+        <label>Число A</label>
+        <input type="number" id="ex4-a" value="15">
+      </div>
+      <div class="field">
+        <label>Число B</label>
+        <input type="number" id="ex4-b" value="9">
+      </div>
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    10 задач разного уровня. Выберите подходящий оператор ветвления: <strong>if / switch / тернарный</strong>.
+    Код задач в файл <code>script.js</code> <strong>не включён</strong> — пишите всё самостоятельно.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">1</span>
+        <h3>Возрастная категория</h3>
+        <span class="task-level easy">лёгкая</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя его возраст и определить, кем он является:<br>
+        • <strong>ребёнок</strong> (0–12)<br>
+        • <strong>подросток</strong> (13–17)<br>
+        • <strong>взрослый</strong> (18–59)<br>
+        • <strong>пенсионер</strong> (60+)<br>
+        <em>Используйте if / else if / else.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">2</span>
+        <h3>Спецсимвол клавиши</h3>
+        <span class="task-level easy">лёгкая</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя число от 0 до 9 и вывести спецсимвол, расположенный на этой клавише:<br>
+        1 → !, 2 → @, 3 → #, 4 → $, 5 → %, 6 → ^, 7 → &amp;, 8 → *, 9 → (, 0 → )<br>
+        <em>Используйте switch.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">3</span>
+        <h3>Модуль числа</h3>
+        <span class="task-level easy">лёгкая</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя число и вывести его модуль: |7| = 7, |-7| = 7.<br>
+        <em>Используйте тернарный оператор.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">4</span>
+        <h3>Кратность 5</h3>
+        <span class="task-level easy">лёгкая</span>
+      </div>
+      <div class="task-text">
+        Запросить 1 число и проверить, кратно оно 5 или нет. Вывести соответствующее сообщение.<br>
+        <em>Используйте тернарный оператор.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">5</span>
+        <h3>Трёхзначное число</h3>
+        <span class="task-level mid">средняя</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя трёхзначное число и проверить, есть ли в нём одинаковые цифры.<br>
+        <em>Подсказка: получите цифры через <code>Math.floor(n / 100)</code>, <code>Math.floor(n / 10) % 10</code>, <code>n % 10</code>.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">6</span>
+        <h3>Високосный год</h3>
+        <span class="task-level mid">средняя</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя год и проверить, високосный он или нет.<br>
+        Правило: год високосный, если кратен 400, ИЛИ кратен 4 и при этом не кратен 100.<br>
+        <em>Используйте логические операторы && и ||.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">7</span>
+        <h3>Конвертер валют</h3>
+        <span class="task-level mid">средняя</span>
+      </div>
+      <div class="task-text">
+        Пользователь вводит количество USD и выбирает, в какую валюту перевести: EUR, UAN или AZN.<br>
+        Курсы: EUR = 0.92, UAN = 41.15, AZN = 1.70 (условно).<br>
+        <em>Используйте switch или объект.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">8</span>
+        <h3>Палиндром</h3>
+        <span class="task-level hard">сложная</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя пятиразрядное число и определить, является ли оно палиндромом (читается одинаково слева направо и справа налево).<br>
+        <em>Пример: 12321 → да, 12345 → нет. Получите цифры через остаток от деления.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">9</span>
+        <h3>Скидка на покупку</h3>
+        <span class="task-level mid">средняя</span>
+      </div>
+      <div class="task-text">
+        Запросить у пользователя сумму покупки и вывести сумму к оплате со скидкой:<br>
+        • от 200 до 300 → скидка 3%<br>
+        • от 300 до 500 → скидка 5%<br>
+        • от 500 и выше → скидка 7%<br>
+        • до 200 → скидки нет<br>
+        <em>Верните объект { percent, final }.</em>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head">
+        <span class="num">10</span>
+        <h3>Дата: следующий день</h3>
+        <span class="task-level hard">сложная</span>
+      </div>
+      <div class="task-text">
+        Запросить дату (день, месяц, год) и вывести следующую за ней дату. Учтите:<br>
+        • переход на следующий месяц (30→31 число)<br>
+        • переход на следующий год (31 декабря)<br>
+        • високосный год (февраль 29 дней)<br>
+        <em>Проверьте корректность введённой даты.</em>
+      </div>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Манипуляции с датами — частый вектор атак. Проверка корректности даты в логах, токенах и сертификатах — обязательная часть security-аудита.</div>
+      </div>
+    </div>
+
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    Ответьте на вопросы письменно или устно. Ответы не подсказываются — проверьте себя по теории выше.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Что вернёт <code>5 == "5"</code>? А <code>5 === "5"</code>? В чём разница?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Какие 6 значений в JavaScript считаются falsy?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Что вернёт <code>Boolean("false")</code>? Почему?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Что такое тернарный оператор? В каких случаях его удобно использовать?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Что случится, если забыть <code>break</code> в блоке <code>switch</code>?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Какой приоритет у логических операторов <code>!</code>, <code>&&</code>, <code>||</code>?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">7</span><h3>Почему нельзя сравнивать <code>NaN</code> через <code>===</code>? Как правильно проверить на <code>NaN</code>?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">8</span><h3>Когда стоит выбрать <code>switch</code>, а когда <code>if-else</code>?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">9</span><h3>Что такое "сравнение с приведением типов"? Приведите пример опасного использования <code>==</code> в системах безопасности.</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">10</span><h3>Можно ли в <code>if</code> использовать не только логическое выражение, но и, например, строку или число? Как это работает?</h3></div>
+    </div>
+
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Источники</span>
+      <h3>Где читать и изучать тему</h3>
+    </div>
+    <div class="task-text">
+      Материалы, использованные при подготовке темы, и рекомендуемые для самостоятельного изучения:
+    </div>
+    <div class="sources-list">
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript" target="_blank">
+        <span class="src-name">MDN Web Docs — JavaScript</span>
+        <span class="src-desc">Главная документация языка. Справочник по всем конструкциям.</span>
+      </a>
+      <a href="https://learn.javascript.ru/ifelse" target="_blank">
+        <span class="src-name">learn.javascript.ru — Условные операторы: if, else, else if</span>
+        <span class="src-desc">Базовая теория с примерами и задачами внутри.</span>
+      </a>
+      <a href="https://learn.javascript.ru/comparison" target="_blank">
+        <span class="src-name">learn.javascript.ru — Операторы сравнения</span>
+        <span class="src-desc">Строгое и нестрогое сравнение, сравнение строк.</span>
+      </a>
+      <a href="https://learn.javascript.ru/logical-operators" target="_blank">
+        <span class="src-name">learn.javascript.ru — Логические операторы</span>
+        <span class="src-desc">&&, ||, ! и их поведение с разными типами.</span>
+      </a>
+      <a href="https://learn.javascript.ru/switch" target="_blank">
+        <span class="src-name">learn.javascript.ru — Конструкция switch</span>
+        <span class="src-desc">Синтаксис, break, группировка case.</span>
+      </a>
+      <a href="https://learn.javascript.ru/types" target="_blank">
+        <span class="src-name">learn.javascript.ru — Типы данных</span>
+        <span class="src-desc">Boolean, приведение типов, falsy-значения.</span>
+      </a>
+    </div>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Терминал</span>
+      <h3>Как запускать код</h3>
+    </div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code> (или Terminal → New Terminal)<br>
+      <strong>2.</strong> Для проверки готовых примеров из урока: <code>node script.js</code><br>
+      <strong>3.</strong> Для своих задач: создайте отдельный файл, например <code>task1.js</code>, и запустите: <code>node task1.js</code><br><br>
+      Не забудьте использовать <code>prompt()</code> для ввода данных и <code>console.log()</code> для вывода результата.
+    </div>
+  </div>
+
+<div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+// ---- Переключатель темы ----
+function getTheme() {
+  return localStorage.getItem('js-theme') || 'dark';
+}
+
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+
+applyTheme(getTheme());
+</script>
+</body>
+</html>

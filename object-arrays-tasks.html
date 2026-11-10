@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Типовые задачи с массивами объектов — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Типовые задачи с массивами объектов</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript · 10 разобранных задач с вводом и выводом</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#examples">Разбор задач</a>
+    <a href="#tasks">Задачи для самостоятельной работы</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>10 задач с пошаговым разбором</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">
+    В каждой задаче данные запрашиваются у пользователя через <code>prompt()</code>, а результат выводится в консоль,
+    причём строки консоли собраны через <strong>шаблонные строки</strong> — обратные кавычки `` и подстановку <code>${}</code>.
+    Ниже — работающая интерактивная версия и полный код, который можно скопировать и запустить в Node.js.
+    Обратите внимание: <code>prompt()</code> работает в браузере, а в Node.js чтение ввода выполняет <code>readline</code>.
+  </p>
+
+  <!-- Задача 1 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 1</span><h3>Создание массива из N записей и вывод</h3></div>
+    <div class="task-text">
+      Запросить N (количество пользователей). N раз запросить имя и баллы, собрать массив объектов, вывести каждую запись через шаблонную строку.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> цикл по N итераций, на каждой — <code>prompt</code> для имени и баллов, затем <code>push</code> объекта. Вывод — цикл с <code>console.log(`Имя — баллы`)</code>.
+    </div>
+    <pre class="code">let n = +prompt("Сколько пользователей?");
+let users = [];
+
+for (let i = 0; i < n; i++) {
+  let name = prompt("Имя пользователя:");
+  let score = +prompt("Баллы:");
+  users.push({ name: name, score: score });
+}
+
+for (let i = 0; i < users.length; i++) {
+  console.log(`${users[i].name} — ${users[i].score} баллов`);
+}</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let n = +prompt("Сколько пользователей?");</td><td class="line-desc">Запрашиваем количество. Унарный + превращает строку из prompt в число.</td></tr>
+        <tr><td class="line-code">let users = [];</td><td class="line-desc">Пустой массив для накопления записей.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; n; i++)</td><td class="line-desc">Повторяем ровно n раз — столько записей создадим.</td></tr>
+        <tr><td class="line-code">let name = prompt("Имя...");</td><td class="line-desc">Запрашиваем имя очередного пользователя.</td></tr>
+        <tr><td class="line-code">let score = +prompt("Баллы:");</td><td class="line-desc">Запрашиваем баллы и сразу преобразуем в число.</td></tr>
+        <tr><td class="line-code">users.push({ name, score });</td><td class="line-desc">Добавляем объект с полями name и score в конец массива.</td></tr>
+        <tr><td class="line-code">for (... i &lt; users.length ...)</td><td class="line-desc">Второй цикл — вывод всех созданных записей.</td></tr>
+        <tr><td class="line-code">console.log(`...${users[i].name} — ${users[i].score}...`);</td><td class="line-desc">Шаблонная строка: подставляет значения полей в текст. ${} вставляет значение выражения.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Кол-во</label><input type="number" id="ex1-n" value="3"></div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 2 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 2</span><h3>Поиск записи по имени</h3></div>
+    <div class="task-text">
+      Запросить имя и найти запись с таким именем в массиве. Вывести данные найденного пользователя через шаблонную строку.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", role: "user" }, { name: "Мария", role: "admin" },
+  { name: "Пётр", role: "user" }
+];
+
+let target = prompt("Кого ищем?");
+let found = -1;
+
+for (let i = 0; i < users.length; i++) {
+  if (users[i].name === target) { found = i; break; }
+}
+
+if (found !== -1) {
+  console.log(`Найдено: ${users[found].name}, роль ${users[found].role}`);
+} else {
+  console.log(`Пользователь "${target}" не найден`);
+}</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let target = prompt("Кого ищем?");</td><td class="line-desc">Запрашиваем имя для поиска.</td></tr>
+        <tr><td class="line-code">let found = -1;</td><td class="line-desc">Индекс найденной записи; -1 — «не найдено».</td></tr>
+        <tr><td class="line-code">if (users[i].name === target)</td><td class="line-desc">Сравниваем поле name текущей записи с введённым именем.</td></tr>
+        <tr><td class="line-code">found = i; break;</td><td class="line-desc">Запоминаем индекс и прерываем цикл (первое совпадение).</td></tr>
+        <tr><td class="line-code">if (found !== -1) {...}</td><td class="line-desc">Проверяем результат поиска и выводим данные через шаблонную строку, либо сообщение об отсутствии.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Имя</label><input type="text" id="ex2-target" value="Мария"></div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 3 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 3</span><h3>Фильтрация по числовому полю</h3></div>
+    <div class="task-text">
+      Запросить порог и отобрать записи, чьё поле revenue не меньше порога. Вывести отобранные записи через шаблонные строки.
+    </div>
+    <pre class="code">let brands = [
+  { name: "TyresPro", revenue: 245000 }, { name: "SecureCart", revenue: 312000 },
+  { name: "OldShop", revenue: 98000 }, { name: "DataWare", revenue: 156000 }
+];
+
+let min = +prompt("Минимальная выручка:");
+let filtered = [];
+
+for (let i = 0; i < brands.length; i++) {
+  if (brands[i].revenue >= min) {
+    filtered.push(brands[i]);
+  }
+}
+
+for (let i = 0; i < filtered.length; i++) {
+  console.log(`${filtered[i].name} — ${filtered[i].revenue} руб.`);
+}</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let min = +prompt("Минимальная выручка:");</td><td class="line-desc">Порог, тоже числом.</td></tr>
+        <tr><td class="line-code">let filtered = [];</td><td class="line-desc">Результирующий массив для прошедших фильтр записей.</td></tr>
+        <tr><td class="line-code">if (brands[i].revenue >= min)</td><td class="line-desc">Условие фильтра по полю revenue.</td></tr>
+        <tr><td class="line-code">filtered.push(brands[i]);</td><td class="line-desc">Добавляем подходящую запись целиком.</td></tr>
+        <tr><td class="line-code">console.log(\`${...}\`)</td><td class="line-desc">Выводим каждую отобранную запись шаблонной строкой.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Порог</label><input type="number" id="ex3-min" value="150000"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 4 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 4</span><h3>Сортировка по полю</h3></div>
+    <div class="task-text">
+      Отсортировать массив объектов по полю revenue (по возрастанию) сортировкой пузырьком. Вывести результат через шаблонную строку.
+    </div>
+    <pre class="code">let brands = [
+  { name: "B", revenue: 200000 }, { name: "A", revenue: 150000 },
+  { name: "D", revenue: 320000 }, { name: "C", revenue: 80000 }
+];
+
+for (let i = 0; i < brands.length - 1; i++) {
+  for (let j = 0; j < brands.length - 1 - i; j++) {
+    if (brands[j].revenue > brands[j + 1].revenue) {
+      let temp = brands[j];
+      brands[j] = brands[j + 1];
+      brands[j + 1] = temp;
+    }
+  }
+}
+
+for (let i = 0; i < brands.length; i++) {
+  console.log(`${brands[i].name} — ${brands[i].revenue}`);
+}</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">for (let i = 0; i &lt; brands.length - 1; i++)</td><td class="line-desc">Внешний цикл — число проходов пузырьковой сортировки.</td></tr>
+        <tr><td class="line-code">for (let j = 0; j &lt; brands.length - 1 - i; j++)</td><td class="line-desc">Внутренний цикл — попарное сравнение соседних записей.</td></tr>
+        <tr><td class="line-code">if (brands[j].revenue &gt; brands[j + 1].revenue)</td><td class="line-desc">Сравниваем поля revenue двух соседних записей.</td></tr>
+        <tr><td class="line-code">let temp = brands[j]; ...</td><td class="line-desc">Обмен целых объектов местами через временную переменную.</td></tr>
+        <tr><td class="line-code">console.log(\`${brands[i].name} — ${brands[i].revenue}\`)</td><td class="line-desc">Вывод отсортированного списка шаблонной строкой.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 5 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 5</span><h3>Сумма и среднее по полю</h3></div>
+    <div class="task-text">
+      Найти сумму и среднее арифметическое поля revenue по всем записям. Результат вывести шаблонной строкой.
+    </div>
+    <pre class="code">let brands = [
+  { name: "TyresPro", revenue: 245000 }, { name: "SecureCart", revenue: 312000 },
+  { name: "OldShop", revenue: 98000 }, { name: "DataWare", revenue: 156000 }
+];
+
+let sum = 0;
+
+for (let i = 0; i < brands.length; i++) {
+  sum += brands[i].revenue;
+}
+
+let avg = sum / brands.length;
+console.log(`Суммарная выручка: ${sum}`);
+console.log(`Средняя выручка: ${Math.round(avg)}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let sum = 0;</td><td class="line-desc">Накопитель суммы.</td></tr>
+        <tr><td class="line-code">sum += brands[i].revenue;</td><td class="line-desc">Прибавляем поле revenue текущей записи.</td></tr>
+        <tr><td class="line-code">let avg = sum / brands.length;</td><td class="line-desc">Среднее = сумма / число записей.</td></tr>
+        <tr><td class="line-code">console.log(\`Средняя выручка: ${Math.round(avg)}\`)</td><td class="line-desc">Подстановка округлённого значения прямо в шаблонную строку.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex5()">Проверить</button>
+    </div>
+    <div id="ex5-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 6 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 6</span><h3>Запись с максимальным значением поля</h3></div>
+    <div class="task-text">
+      Найти запись с максимальным revenue и вывести её данные через шаблонную строку.
+    </div>
+    <pre class="code">let brands = [
+  { name: "TyresPro", revenue: 245000 }, { name: "SecureCart", revenue: 312000 },
+  { name: "OldShop", revenue: 98000 }, { name: "DataWare", revenue: 156000 }
+];
+
+let max = brands[0];
+
+for (let i = 1; i < brands.length; i++) {
+  if (brands[i].revenue > max.revenue) {
+    max = brands[i];
+  }
+}
+
+console.log(`Бренд с максимумом: ${max.name}, ${max.revenue}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let max = brands[0];</td><td class="line-desc">Считаем первую запись максимальной — как стартовую.</td></tr>
+        <tr><td class="line-code">if (brands[i].revenue &gt; max.revenue)</td><td class="line-desc">Сравниваем поле revenue с текущим максимумом.</td></tr>
+        <tr><td class="line-code">max = brands[i];</td><td class="line-desc">Перезаписываем ссылку на запись-максимум.</td></tr>
+        <tr><td class="line-code">console.log(\`...${max.name}, ${max.revenue}\`)</td><td class="line-desc">Выводим данные найденной записи шаблонной строкой.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex6()">Проверить</button>
+    </div>
+    <div id="ex6-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 7 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 7</span><h3>Подсчёт записей по условию поля</h3></div>
+    <div class="task-text">
+      Посчитать, сколько записей имеют поле active === true. Вывести количество через шаблонную строку.
+    </div>
+    <pre class="code">let brands = [
+  { name: "TyresPro", revenue: 245000, active: true },
+  { name: "SecureCart", revenue: 312000, active: true },
+  { name: "OldShop", revenue: 98000, active: false },
+  { name: "DataWare", revenue: 156000, active: true }
+];
+
+let activeCount = 0;
+
+for (let i = 0; i < brands.length; i++) {
+  if (brands[i].active) {
+    activeCount++;
+  }
+}
+
+console.log(`Активных брендов: ${activeCount} из ${brands.length}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">if (brands[i].active)</td><td class="line-desc">Поле active — булево, поэтому можно проверять напрямую без сравнения с true (оно и так true/false).</td></tr>
+        <tr><td class="line-code">activeCount++;</td><td class="line-desc">Увеличиваем счётчик при «активной» записи.</td></tr>
+        <tr><td class="line-code">console.log(\`Активных брендов: ${activeCount} из ${brands.length}\`)</td><td class="line-desc">Вывод двух подстановок в одной шаблонной строке.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex7()">Проверить</button>
+    </div>
+    <div id="ex7-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 8 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 8</span><h3>Подсчёт по введённой роли</h3></div>
+    <div class="task-text">
+      Запросить роль и посчитать, сколько пользователей имеют эту роль. Результат вывести шаблонной строкой.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", role: "user" }, { name: "Мария", role: "admin" },
+  { name: "Пётр", role: "user" }, { name: "Анна", role: "viewer" }
+];
+
+let role = prompt("Какую роль посчитать?");
+let count = 0;
+
+for (let i = 0; i < users.length; i++) {
+  if (users[i].role === role) {
+    count++;
+  }
+}
+
+console.log(`Пользователей с ролью "${role}": ${count}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let role = prompt("Какую роль посчитать?");</td><td class="line-desc">Ввод роли для подсчёта.</td></tr>
+        <tr><td class="line-code">if (users[i].role === role)</td><td class="line-desc">Строгое сравнение поля role с введённым значением.</td></tr>
+        <tr><td class="line-code">console.log(\`...${role}"... ${count}\`)</td><td class="line-desc">Подстановка и роли, и количества в одну шаблонную строку.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field">
+        <label>Роль</label>
+        <select id="ex8-role">
+          <option>user</option>
+          <option>admin</option>
+          <option>viewer</option>
+        </select>
+      </div>
+      <button class="btn" onclick="ex8()">Проверить</button>
+    </div>
+    <div id="ex8-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 9 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 9</span><h3>Обновление поля всех записей</h3></div>
+    <div class="task-text">
+      Добавить одинаковый бонус к полю score всех записей. Ввод бонуса через prompt, вывод — шаблонной строкой.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", score: 85 }, { name: "Мария", score: 92 }, { name: "Пётр", score: 78 }
+];
+
+let bonus = +prompt("Сколько добавить баллов?");
+
+for (let i = 0; i < users.length; i++) {
+  users[i].score += bonus;
+}
+
+for (let i = 0; i < users.length; i++) {
+  console.log(`Обновлённый балл: ${users[i].name} → ${users[i].score}`);
+}</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let bonus = +prompt("Сколько добавить баллов?");</td><td class="line-desc">Ввод бонуса, сразу числом.</td></tr>
+        <tr><td class="line-code">users[i].score += bonus;</td><td class="line-desc">Прибавляем бонус к полю score каждой записи (мутация объекта).</td></tr>
+        <tr><td class="line-code">console.log(\`Обновлённый балл: ${users[i].name} → ${users[i].score}\`)</td><td class="line-desc">Вывод имени и нового значения через подстановку.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Бонус</label><input type="number" id="ex9-bonus" value="5"></div>
+      <button class="btn" onclick="ex9()">Проверить</button>
+    </div>
+    <div id="ex9-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 10 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 10</span><h3>Отбор записей выше порога</h3></div>
+    <div class="task-text">
+      Запросить порог и оставить в новом массиве только записи, чей score не ниже порога. Вывести оставшиеся через шаблонную строку.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", score: 85 }, { name: "Мария", score: 92 },
+  { name: "Пётр", score: 40 }, { name: "Анна", score: 60 }
+];
+
+let threshold = +prompt("Минимальный балл:");
+let kept = [];
+
+for (let i = 0; i < users.length; i++) {
+  if (users[i].score >= threshold) {
+    kept.push(users[i]);
+  }
+}
+
+console.log(`Прошли порог: ${kept.length} человек`);
+for (let i = 0; i < kept.length; i++) {
+  console.log(`${kept[i].name} — ${kept[i].score}`);
+}</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let threshold = +prompt("Минимальный балл:");</td><td class="line-desc">Ввод порога.</td></tr>
+        <tr><td class="line-code">let kept = [];</td><td class="line-desc">Новый массив для прошедших порог записей.</td></tr>
+        <tr><td class="line-code">if (users[i].score >= threshold)</td><td class="line-desc">Условие отбора по полю score.</td></tr>
+        <tr><td class="line-code">kept.push(users[i]);</td><td class="line-desc">Добавляем подходящую запись.</td></tr>
+        <tr><td class="line-code">console.log(\`Прошли порог: ${kept.length} человек\`)</td><td class="line-desc">Вывод количества отобранных записей.</td></tr>
+        <tr><td class="line-code">console.log(\`${kept[i].name} — ${kept[i].score}\`)</td><td class="line-desc">Вывод каждой отобранной записи. Исходный массив не изменён.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Порог</label><input type="number" id="ex10-threshold" value="70"></div>
+      <button class="btn" onclick="ex10()">Проверить</button>
+    </div>
+    <div id="ex10-trace" class="trace"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ЗАДАЧИ ДЛЯ САМОСТОЯТЕЛЬНОЙ РАБОТЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    6 задач по мотивам разобранных примеров. Используйте <code>prompt()</code> для ввода и <code>console.log</code> со шаблонными строками для вывода.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Спикеры по имени</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив объектов { name, level }. Запросить имя, найти запись и вывести уровень через шаблонную строку. Приём — как в Задаче 2.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Только активные</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив { name, active }. Вывести имена только активных записей. Приём — фильтрация по булеву полю, как в Задаче 7.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Самый молодой</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив { name, age }. Найти запись с минимальным возрастом. Приём — как поиск максимума (Задача 6), но знак сравнения наоборот.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Средний балл выше порога</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив { name, score }. Вычислить средний балл, затем вывести записи, чей score выше среднего. Два прохода: Задача 5 + Задача 10.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Прибавить процент</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив { name, price }. Запросить процент и увеличить поле price каждой записи на этот процент. Приём — обновление полей, как в Задаче 9.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Вывод «название = значение»</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Запросить N пар «название, значение» через prompt, собрать массив объектов, затем вывести все пары в виде `название = значение` (как Задача 1, но с форматированием вида name = value).</div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ВОПРОСЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">Ответьте письменно, сверившись с разобранными задачами.</p>
+
+  <div class="tasks-list">
+    <div class="task"><div class="task-head"><span class="num">1</span><h3>Для чего нужен унарный + перед prompt() при вводе чисел?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">2</span><h3>Что делает подстановка ${} внутри обратных кавычек?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">3</span><h3>Как шаблонная строка отличается от обычной строки с конкатенацией +?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">4</span><h3>Почему в Задаче 7 поле active проверяется без сравнения с true?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">5</span><h3>Что происходит с записью при обновлении её поля users[i].score += bonus? Меняется ли исходный массив?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">6</span><h3>В чём отличие фильтрации (Задача 10) от поиска одной записи (Задача 2)?</h3></div></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>В браузере:</strong> код с <code>prompt()</code> запускается в консоли разработчика (F12).<br>
+      <strong>В Node.js:</strong> <code>prompt()</code> отсутствует — для ввода используйте <code>readline</code> или заранее заданные данные, а вывод через <code>console.log</code> работает как обычно.<br>
+      Способ запуска: <code>node имя_файла.js</code><br><br>
+      Шаблонные строки (`` и ${}) работают в обоих окружениях без настроек.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="object-arrays-tasks.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

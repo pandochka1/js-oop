@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Условный оператор — вопросы и задания</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <div>
+      <h1>Условный оператор</h1>
+      <div class="subtitle">Практическое задание · Модуль 1 «Введение в JavaScript»</div>
+    </div>
+  </div>
+
+  <div class="task-header">
+    <h2>ПРАКТИЧЕСКОЕ ЗАДАНИЕ</h2>
+    <div class="task-topic">Тема: Условный оператор · if / else / switch</div>
+  </div>
+
+  <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">
+    Общая <strong>постановка задачи</strong>: для каждого задания выберите подходящий оператор ветвления —
+    <strong>if / else</strong> или <strong>switch</strong>. Файл решения создайте сами. Запуск: <code>node task.js</code>.
+    На вопросы под заданием отвечайте письменно, объясняя выбор оператора.
+  </p>
+
+  <div class="section-title"><div class="bar"></div><h2>Задачи на if / else</h2></div>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Возрастная категория</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить у пользователя возраст и определить, кем он является: ребёнок (0–12), подросток (13–17), взрослый (18–59) или пенсионер (60+).</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Используйте цепочку if / else if / else. Начните с самой младшей категории и проверяйте возраст по нарастающей.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Почему важен порядок проверок? Что будет, если сначала проверить «пенсионер»?</li>
+          <li>Какое условие нужно для категории «взрослый»? Почему достаточно одной проверки?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Планета</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить название планеты. Если введено «Земля» или «земля» — «Привет, землянин!», иначе — «Привет, инопланетянин!».</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Чтобы не проверять оба варианта регистра, приведите ввод к нижнему регистру через toLowerCase() и сравните с "земля".</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Зачем нужен toLowerCase()? Какие ещё варианты ввода он «закрывает»?</li>
+          <li>Что произойдёт, если пользователь введёт пустую строку?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Модуль числа</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить число и вывести его модуль (|7| = 7, |-7| = 7).</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Модуль — число без знака: если число меньше нуля, берём отрицание. Можно решить через if или тернарный оператор.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Как выглядит тернарный оператор? В каких случаях его применяют?</li>
+          <li>Запишите решение через if…else и сравните длину кода с тернарным вариантом.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Кратность 5</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить число и проверить, кратно ли оно 5. Вывести соответствующее сообщение.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Остаток от деления на 5 должен быть равен 0: n % 5 === 0. Строгое сравнение === обязательно.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Что возвращает оператор % ? Приведите пример для n = 12.</li>
+          <li>Чем === отличается от ==? Почему здесь важно строгое сравнение?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Трёхзначное число</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить трёхзначное число и проверить, есть ли в нём одинаковые цифры. Например, 121 — есть, 123 — нет.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Цифры числа получите так: сотни = Math.floor(n / 100), десятки = Math.floor(n / 10) % 10, единицы = n % 10. Затем сравните попарно через логические операторы.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Объясните, как формула для десятков получает вторую цифру?</li>
+          <li>Какой логический оператор (&& или ||) свяжет проверки равенства цифр и почему?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Високосный год</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить год и проверить, високосный ли он. Год високосный, если кратен 400 либо кратен 4 и не кратен 100.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Соберите условие одной строкой: (год % 4 === 0 && год % 100 !== 0) || (год % 400 === 0).</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Проверьте вручную: 2000, 1900, 2024. Почему 1900 — не високосный?</li>
+          <li>Какой приоритет у операторов && и || в составном условии?</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title"><div class="bar"></div><h2>Задачи на switch</h2></div>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Спецсимвол клавиши</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить число от 0 до 9 и вывести спецсимвол на этой клавише: 1→!, 2→@, 3→#, 4→$, 5→%, 6→^, 7→&amp;, 8→*, 9→(, 0→).</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Здесь 10 одинаковых по смыслу проверок одной переменной — используйте switch. Для символа '#' запишите '#' как строку. Не забудьте break в каждом case.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Почему switch удобнее, чем 10 проверок if?</li>
+          <li>Что произойдёт, если в одном из case забыть break?</li>
+          <li>Что выведет default для числа 12?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Конвертер валют</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Пользователь вводит количество USD и выбирает валюту: EUR, UAN или AZN. Вывести полученную сумму. Курсы задайте сами.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Сравнение выбранной валюты — три варианта одной переменной, удобно switch. В каждом case умножайте сумму на соответствующий курс.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Какую роль выполняет default в switch?</li>
+          <li>Что будет, если пользователь введёт валюту, которой нет в списке?</li>
+          <li>Где удобнее хранить курсы — в switch или в объекте? Почему?</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="color:var(--faint); margin-top:16px; font-size:13px;">
+    Требования: для ввода — prompt(), для вывода — console.log().
+    Каждая задача — отдельная функция в одном файле. Названия переменных осмысленные.
+  </p>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var label = document.getElementById('theme-label');
+  function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+  function applyTheme(theme) {
+    if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+    else { document.documentElement.removeAttribute('data-theme'); }
+    if (label) label.textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+  }
+  function toggleTheme() {
+    var next = getTheme() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('js-theme', next);
+    applyTheme(next);
+  }
+  applyTheme(getTheme());
+  window.toggleTheme = toggleTheme;
+})();
+</script>
+</body>
+</html>

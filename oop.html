@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Классы в JavaScript — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Классы в JavaScript</h1>
+      <div class="subtitle">Объектно&#8209;ориентированное программирование · часть 1</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#theory">Теория</a>
+    <a href="#examples">Примеры</a>
+    <a href="#tasks">Задачи</a>
+    <a href="#quiz">Тест</a>
+    <a href="#written">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕОРИЯ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="theory"><div class="bar"></div><h2>Теория</h2></div>
+
+  <details class="theory" open>
+    <summary>Зачем нужны классы <span class="src">learn.javascript.ru/class</span></summary>
+    <div class="theory-body">
+      <p>Когда программа работает с одним объектом, достаточно обычного литерала. Но как только в проекте появляется много однотипных объектов — пользователей, сессий, сетевых пакетов — нужен способ описывать их «по образцу». Именно эту роль выполняет класс: он задаёт структуру и поведение, а каждый конкретный объект создаётся из этого образца.</p>
+      <p>Объект, который появляется по описанию класса, называют <strong>экземпляром</strong> (instance). Класс описывает «тип», экземпляр — «конкретный представитель» этого типа. Например, класс <code class="inline">User</code> описывает любого пользователя, а экземпляр с именем <code class="inline">"Мария"</code> — конкретного пользователя.</p>
+      <p>Классы в JavaScript появились как «синтаксический сахар» поверх прототипного наследования — но за этим сахаром стоит заметное упрощение кода. Один класс заменяет конструктор-функцию, план свойств и описание методов, которые раньше нужно было собирать вручную.</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Классы отлично подходят для моделей предметной области, где важны ограничения. Класс <code class="inline">User</code>, который сам проверяет свои права, или <code class="inline">Session</code>, которая сама следит за сроком жизни, — это распространённый приём при построении безопасных веб-систем.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Синтаксис класса: конструктор, поля, методы <span class="src">learn.javascript.ru/class</span></summary>
+    <div class="theory-body">
+      <p>Минимальный класс состоит из имени, метода-конструктора и одного-двух методов:</p>
+      <pre class="code">class User {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  isAdult() {
+    return this.age >= 18;
+  }
+}</pre>
+      <ul>
+        <li><strong>class User</strong> — объявление класса. По договорённости имя класса пишут с большой буквы.</li>
+        <li><strong>constructor(...)</strong> — специальный метод, который вызывается автоматически при создании экземпляра через <code class="inline">new</code>. В нём обычно инициализируют поля объекта.</li>
+        <li><strong>this</strong> — ссылка на создаваемый / текущий объект. Через <code class="inline">this.name = ...</code> мы сохраняем значение в поле конкретного экземпляра.</li>
+        <li><strong>Обычные методы</strong> — функции, которые имеет каждый экземпляр. Они записываются без ключевого слова <code class="inline">function</code> и запятой между ними не требуется.</li>
+        <li>Между методами запятые <strong>не ставятся</strong> — это частaя ошибка у тех, кто переходит с объектов-литералов.</li>
+      </ul>
+      <p>Создание экземпляра выполняется оператором <code class="inline">new</code>:</p>
+      <pre class="code">let user = new User("Олег", 21);
+console.log(user.name);   // Олег
+console.log(user.isAdult()); // true</pre>
+      <p>Без <code class="inline">new</code> класс вызвать нельзя — это важное отличие от обычных функций. Вызов <code class="inline">User("Олег", 21)</code> приведёт к ошибке.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Приватные поля и геттеры <span class="src">learn.javascript.ru/private-protected-properties-methods</span></summary>
+    <div class="theory-body">
+      <p>Не все данные объекта должны быть видны снаружи. Пароль, токен, ключ шифрования — это внутренние секреты, доступ к которым нужно ограничить. Для этого существуют <strong>приватные поля</strong> — они начинаются с символа решётки <code class="inline">#</code>:</p>
+      <pre class="code">class Session {
+  #token;
+  #expiresAt;
+
+  constructor(ttlMin) {
+    this.#token = Math.random().toString(36).slice(2);
+    this.#expiresAt = Date.now() + ttlMin * 60000;
+  }
+
+  get token() {
+    return this.#token;
+  }
+}</pre>
+      <p>Приватное поле <code class="inline">#token</code> доступно только внутри класса. Попытка обратиться к <code class="inline">session.#token</code> снаружи вызовет ошибку. Это и есть <strong>инкапсуляция</strong>: скрытие внутреннего состояния за интерфейсом.</p>
+      <p>Чтобы контролируемо отдавать данные наружу, используют <strong>геттеры</strong> — методы со словом <code class="inline">get</code>. Снаружи геттер вызывается как обычное свойство, без скобок:</p>
+      <pre class="code">let s = new Session(30);
+console.log(s.token);   // вызовет геттер, вернёт токен
+// s.#token — ошибка, поле недоступно</pre>
+      <p>Геттер — это не «просто переменная», а метод: внутри него можно выполнять логику, например, скрывать часть данных.</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Инкапсуляция в программировании — близкий родственник «минимальных привилегий» в безопасности. Чем меньше данных снаружи, тем труднее случайно раскрыть секрет или сломать внутреннюю логику. Токен сессии, хранящийся в приватном поле, не «вытечет» в случайный вызов console.log, если сам класс того не позволяет.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Сеттеры и проверка данных</summary>
+    <div class="theory-body">
+      <p>Если геттер читает значение, то <strong>сеттер</strong> — записывает его, и при записи можно выполнить проверку. Это удобно для валидации входных данных:</p>
+      <pre class="code">class Account {
+  #password;
+
+  constructor(login) {
+    this.login = login;
+    this.#password = "";
+  }
+
+  set password(value) {
+    if (value.length < 8) {
+      throw new Error("Пароль слишком короткий");
+    }
+    this.#password = value;
+  }
+
+  get password() {
+    return "***";
+  }
+
+  check(value) {
+    return this.#password === value;
+  }
+}</pre>
+      <p>Сеттер <code class="inline">set password</code> вызывается при присваивании <code class="inline">acc.password = "..."</code>. Если пароль короче 8 символов — бросается исключение, и значение не сохраняется.</p>
+      <p>Важно понимать: сеттер — это метод, а не просто «поле без ограничений». Он даёт единственную точку, где все данные проходят через проверку. Это надёжнее, чем проверять каждый раз снаружи класса.</p>
+      <p>Метод <code class="inline">check</code> сравнивает переданное значение с сохранённым — так проверяют пароль, не выдавая сам пароль наружу. Реальный пароль наружу вообще не отдаётся — наружу доходит только результат сравнения <code class="inline">true/false</code>.</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Проверка пароля «изнутри» объекта, без доступа к самому паролю, — базовый принцип. Хеш пароля тоже сравнивают именно так: наружу выходит только бит «совпало / не совпало», а не сам хеш. Сеттер с валидацией — первый шаг к этому на уровне кода.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Наследование: extends и super <span class="src">learn.javascript.ru/class-inheritance</span></summary>
+    <div class="theory-body">
+      <p>Классы позволяют строить иерархии: один класс может взять поля и методы другого и дополнительно задать своё. Это называется <strong>наследованием</strong>.</p>
+      <pre class="code">class BaseUser {
+  constructor(name) {
+    this.name = name;
+  }
+  role() {
+    return "пользователь";
+  }
+}
+
+class Admin extends BaseUser {
+  constructor(name, department) {
+    super(name);
+    this.department = department;
+  }
+  role() {
+    return "администратор";
+  }
+}</pre>
+      <ul>
+        <li><strong>extends</strong> — указывает, что класс <code class="inline">Admin</code> наследует от <code class="inline">BaseUser</code>.</li>
+        <li><strong>super(...)</strong> — вызов конструктора родителя. Он обязан быть первым вызовом в теле дочернего конструктора, до использования <code class="inline">this</code>.</li>
+        <li><strong>super.method()</strong> — обращение к методу родителя. Позволяет расширить код родителя, а не копировать его.</li>
+        <li><strong>Переопределение</strong> — дочерний класс может переписать метод родителя с тем же именем.</li>
+      </ul>
+      <p>Экземпляр <code class="inline">Admin</code> имеет и поля родителя (<code class="inline">name</code>), и собственные (<code class="inline">department</code>). Наследование «по наследству» передаёт базовое поведение, а дочерний класс добавляет специфику.</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Иерархия ролей — классика. Класс <code class="inline">BaseUser</code> описывает общего пользователя, а <code class="inline">Admin</code>, <code class="inline">Auditor</code>, <code class="inline">Operator</code> наследуют его и расширяют права. Это естественная модель для разграничения доступа (RBAC), где более привилегированная роль базируется на менее привилегированной.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Статические методы <span class="src">learn.javascript.ru/static-properties-methods</span></summary>
+    <div class="theory-body">
+      <p>Иногда метод принадлежит не отдельному экземпляру, а самому классу в целом. Такие методы называют <strong>статическими</strong> и помечают словом <code class="inline">static</code>:</p>
+      <pre class="code">class AuditLog {
+  constructor() {
+    this.entries = [];
+  }
+
+  static format(entry) {
+    return entry.time + " [" + entry.level + "] " + entry.message;
+  }
+
+  log(level, message) {
+    this.entries.push({ time: Date.now(), level, message });
+  }
+}</pre>
+      <p>Статический метод <code class="inline">format</code> вызывается через имя класса, а не через экземпляр:</p>
+      <pre class="code">let formatted = AuditLog.format({ time: 123, level: "warn", message: "x" });
+// Обычный метод log — через экземпляр:
+let logger = new AuditLog();
+logger.log("warn", "внимание");</pre>
+      <p>Статические методы удобно использовать для вспомогательных операций, которые не зависят от конкретного объекта, — форматирование, конвертация, фабрики создания объектов.</p>
+    </div>
+  </details>
+
+  <!-- ============================================================ -->
+  <!-- ПРИМЕРЫ С РАЗБОРОМ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>Примеры с пошаговым разбором</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 1</span>
+      <h3>Класс User и проверка прав</h3>
+    </div>
+    <div class="task-text">
+      Создать класс User с полями name и role и методом canAccess(), который проверяет права на действие по роли. Это пример разграничения доступа на уровне объекта.
+    </div>
+    <pre class="code">class User {
+  constructor(name, role) {
+    this.name = name;
+    this.role = role;
+  }
+
+  canAccess(action) {
+    const matrix = {
+      admin:  ["create", "read", "update", "delete"],
+      editor: ["create", "read", "update"],
+      viewer: ["read"]
+    };
+    const rights = matrix[this.role];
+    return rights ? rights.includes(action) : false;
+  }
+
+  describe() {
+    return this.name + " (роль: " + this.role + ")";
+  }
+}
+
+let user = new User("Олег", "editor");
+console.log(user.canAccess("delete")); // false
+console.log(user.describe());</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">class User {</td><td class="line-desc">Начинаем объявление класса User.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;constructor(name, role) {</td><td class="line-desc">Конструктор принимает имя и роль. Вызывается автоматически при new User(...).</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;</td><td class="line-desc">Сохраняем имя в поле создаваемого объекта.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;this.role = role;</td><td class="line-desc">Сохраняем роль в поле создаваемого объекта.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;canAccess(action) {</td><td class="line-desc">Метод проверяет, можно ли выполнить действие с текущей ролью.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;const matrix = { ... };</td><td class="line-desc">Словарь «роль → список разрешённых действий». admin может максимум, viewer — только читать.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;const rights = matrix[this.role];</td><td class="line-desc">Берём список прав для роли данного экземпляра.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;return rights ? rights.includes(action) : false;</td><td class="line-desc">Если роль найдена — проверяем наличие действия через includes(); если роли нет в словаре (например, "hacker") — false.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;describe()</td><td class="line-desc">Вспомогательный метод — формирует строку-описание объекта.</td></tr>
+        <tr><td class="line-code">let user = new User("Олег", "editor");</td><td class="line-desc">Создаём экземпляр с ролью editor.</td></tr>
+        <tr><td class="line-code">console.log(user.canAccess("delete"));</td><td class="line-desc">editor права на delete нет → выведет false.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Имя</label><input type="text" id="ex1-name" value="Олег"></div>
+      <div class="field">
+        <label>Роль</label>
+        <select id="ex1-role">
+          <option>admin</option>
+          <option selected>editor</option>
+          <option>viewer</option>
+          <option>hacker</option>
+        </select>
+      </div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 2</span>
+      <h3>Класс Session с приватным токеном</h3>
+    </div>
+    <div class="task-text">
+      Сессия хранит токен, который не должен «вытечь» наружу. Поле #token — приватное. Снаружи доступен только геттер и методы проверки.
+    </div>
+    <pre class="code">class Session {
+  #token;
+  #expiresAt;
+
+  constructor(user, ttlMin) {
+    this.user = user;
+    this.#token = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+    this.#expiresAt = Date.now() + ttlMin * 60000;
+  }
+
+  get token() { return this.#token; }
+
+  isValid() { return Date.now() < this.#expiresAt; }
+}
+
+let s = new Session("guest", 30);
+console.log(s.token);      // через геттер
+console.log(s.isValid());  // true</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">#token;</td><td class="line-desc">Объявление приватного поля. Снаружи класса к нему не обратиться.</td></tr>
+        <tr><td class="line-code">#expiresAt;</td><td class="line-desc">Ещё одно приватное поле — метка времени окончания срока жизни.</td></tr>
+        <tr><td class="line-code">constructor(user, ttlMin)</td><td class="line-desc">Конструктор принимает имя пользователя и срок в минутах.</td></tr>
+        <tr><td class="line-code">this.#token = Math.random().toString(36)...</td><td class="line-desc">Генерируем случайный токен. .toString(36) переводит число в «буквенно-цифровую» строку.</td></tr>
+        <tr><td class="line-code">this.#expiresAt = Date.now() + ttlMin * 60000;</td><td class="line-desc">Запоминаем момент истечения: сейчас + ttl минут в миллисекундах.</td></tr>
+        <tr><td class="line-code">get token() { return this.#token; }</td><td class="line-desc">Геттер отдаёт токен наружу. Это единственный «легальный» способ его получить.</td></tr>
+        <tr><td class="line-code">isValid() { return Date.now() < this.#expiresAt; }</td><td class="line-desc">Проверка: не истёк ли срок. Возвращает true/false.</td></tr>
+        <tr><td class="line-code">let s = new Session("guest", 30);</td><td class="line-desc">Создаём сессию со сроком 30 минут.</td></tr>
+        <tr><td class="line-code">console.log(s.token);</td><td class="line-desc">Обращение к геттеру (без скобок) — вернёт токен.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Срок жизни, мин</label><input type="number" id="ex2-ttl" value="30"></div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 3</span>
+      <h3>Класс Account: сеттер с проверкой пароля</h3>
+    </div>
+    <div class="task-text">
+      Аккаунт хранит пароль в приватном поле. Сеттер проверяет длину, геттер не раскрывает реальный пароль, а метод check() сравнивает значения изнутри.
+    </div>
+    <pre class="code">class Account {
+  #password;
+
+  constructor(login) {
+    this.login = login;
+    this.#password = "";
+  }
+
+  set password(value) {
+    if (value.length < 8) {
+      throw new Error("Пароль слишком короткий");
+    }
+    this.#password = value;
+  }
+
+  get password() { return "***"; }
+
+  check(value) {
+    return this.#password === value;
+  }
+}
+
+let a = new Account("user1");
+a.password = "secret123";
+console.log(a.password); // ***
+console.log(a.check("secret123")); // true</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">#password;</td><td class="line-desc">Приватное поле для хранения пароля. Доступно только внутри класса.</td></tr>
+        <tr><td class="line-code">constructor(login)</td><td class="line-desc">Конструктор принимает логин и инициализирует приватный пароль пустой строкой.</td></tr>
+        <tr><td class="line-code">set password(value) {</td><td class="line-desc">Сеттер срабатывает на присваивание a.password = "..." .</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (value.length < 8) throw new Error(...)</td><td class="line-desc">Проверка минимальной длины. При нарушении — исключение, поле не изменится.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;this.#password = value;</td><td class="line-desc">Если проверка пройдена — сохраняем пароль в приватное поле.</td></tr>
+        <tr><td class="line-code">get password() { return "***"; }</td><td class="line-desc">Геттер маскирует реальный пароль. Снаружи увидим только «***».</td></tr>
+        <tr><td class="line-code">check(value) { return this.#password === value; }</td><td class="line-desc">Сравнение переданного значения с сохранённым. Реальный пароль наружу не выходит.</td></tr>
+        <tr><td class="line-code">a.password = "secret123";</td><td class="line-desc">Вызывает сеттер — пароль проходит проверку длины и сохраняется.</td></tr>
+        <tr><td class="line-code">console.log(a.check("secret123"));</td><td class="line-desc">Вернёт true, так как значение совпадает.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Пароль</label><input type="password" id="ex3-pwd" value="secret123"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 4</span>
+      <h3>Наследование: Admin extends BaseUser</h3>
+    </div>
+    <div class="task-text">
+      Класс Admin наследует поля и методы BaseUser, добавляет собственное поле department и переопределяет метод role(). Через super() вызывается конструктор родителя.
+    </div>
+    <pre class="code">class BaseUser {
+  constructor(name) {
+    this.name = name;
+  }
+  role() { return "пользователь"; }
+}
+
+class Admin extends BaseUser {
+  constructor(name, department) {
+    super(name);
+    this.department = department;
+  }
+  role() { return "администратор"; }
+  full() {
+    return super.role() + " → " + this.role() + " из одела " + this.department;
+  }
+}
+
+let a = new Admin("Мария", "ИБ");
+console.log(a.full());</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">class BaseUser</td><td class="line-desc">Базовый класс — общий пользователь с именем и методом role().</td></tr>
+        <tr><td class="line-code">constructor(name) { this.name = name; }</td><td class="line-desc">Конструктор базового класса сохраняет имя.</td></tr>
+        <tr><td class="line-code">role() { return "пользователь"; }</td><td class="line-desc">Метод роли базового класса возвращает «пользователь».</td></tr>
+        <tr><td class="line-code">class Admin extends BaseUser</td><td class="line-desc">Admin наследует всё из BaseUser.</td></tr>
+        <tr><td class="line-code">constructor(name, department)</td><td class="line-desc">Дочерний конструктор принимает имя и отдел.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;super(name);</td><td class="line-desc">Вызывает конструктор родителя — тот сохраняет name. super() должен идти первым, до использования this.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;this.department = department;</td><td class="line-desc">Добавляем собственное поле department.</td></tr>
+        <tr><td class="line-code">role() { return "администратор"; }</td><td class="line-desc">Переопределяем метод родителя: теперь возвращает «администратор».</td></tr>
+        <tr><td class="line-code">full()</td><td class="line-desc">Новый метод, которого нет в родителе.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;return super.role() + " → " ...</td><td class="line-desc">super.role() вызывает метод родителя («пользователь»), this.role() — переопределённый («администратор»).</td></tr>
+        <tr><td class="line-code">let a = new Admin("Мария", "ИБ");</td><td class="line-desc">Создаём администратора. Конструктор цепочкой проходит через super().</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Имя</label><input type="text" id="ex4-name" value="Мария"></div>
+      <div class="field"><label>Отдел</label><input type="text" id="ex4-dept" value="ИБ"></div>
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 5</span>
+      <h3>Класс AuditLog со статическим методом</h3>
+    </div>
+    <div class="task-text">
+      Журнал событий безопасности. Метод log() добавляет запись, статический format() форматирует одну запись — он не зависит от конкретного экземпляра и вызывается через имя класса.
+    </div>
+    <pre class="code">class AuditLog {
+  constructor() {
+    this.entries = [];
+  }
+
+  static format(entry) {
+    return new Date(entry.time).toISOString() + " [" + entry.level + "] " + entry.message;
+  }
+
+  log(level, message) {
+    this.entries.push({ time: Date.now(), level, message });
+  }
+
+  latest() {
+    const last = this.entries[this.entries.length - 1];
+    return last ? AuditLog.format(last) : "записей нет";
+  }
+}
+
+let logger = new AuditLog();
+logger.log("warn", "Подозрительное действие");
+console.log(logger.latest());</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">constructor() { this.entries = []; }</td><td class="line-desc">Каждый журнал начинает с пустого массива записей.</td></tr>
+        <tr><td class="line-code">static format(entry)</td><td class="line-desc">Статический метод — принадлежит классу, а не экземпляру. Вызывается как AuditLog.format(...).</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;return new Date(entry.time).toISOString() ...</td><td class="line-desc">Превращает метку времени в читаемую строку и собирает [уровень] сообщение.</td></tr>
+        <tr><td class="line-code">log(level, message)</td><td class="line-desc">Обычный метод — добавляет запись в массив entries экземпляра.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;this.entries.push({ time: Date.now(), ... });</td><td class="line-desc">Записываем момент, уровень и сообщение.</td></tr>
+        <tr><td class="line-code">latest()</td><td class="line-desc">Возвращает последнюю запись в отформатированном виде.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;return last ? AuditLog.format(last) : "записей нет";</td><td class="line-desc">Если записей нет — возвращает текст, иначе форматирует последнюю через статический метод.</td></tr>
+        <tr><td class="line-code">let logger = new AuditLog();</td><td class="line-desc">Создаём экземпляр журнала.</td></tr>
+        <tr><td class="line-code">logger.log("warn", "Подозрительное действие");</td><td class="line-desc">Добавляем запись уровнем warn.</td></tr>
+        <tr><td class="line-code">console.log(logger.latest());</td><td class="line-desc">Выводим последнюю запись в форматированном виде.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Сообщение</label><input type="text" id="ex5-message" value="Зафиксирована попытка входа"></div>
+      <div class="field">
+        <label>Уровень</label>
+        <select id="ex5-level">
+          <option selected>warn</option>
+          <option>info</option>
+          <option>error</option>
+        </select>
+      </div>
+      <button class="btn" onclick="ex5()">Проверить</button>
+    </div>
+    <div id="ex5-trace" class="trace"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ЗАДАЧИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    5 задач по аналогии с разобранными примерами. Соседние задачи устроены как примеры — используйте их как образец.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Класс Event</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">По аналогии с примером User: класс Event с полями name, severity (уровень серьёзности) и методом isCritical(), который возвращает true, если severity ≥ 8.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Класс Token</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">По аналогии с примером Session: класс Token с приватным значением #value и методом length(), который возвращает длину токена (но не сам токен).</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Класс IpAddress с проверкой</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">По аналогии с примером Account: класс IpAddress. Поле #ip приватное. Сеттер ip проверяет, что строка выглядит как адрес (должна содержать ровно 3 точки), иначе бросает исключение. Добавьте геттер и метод isValid().</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Наследование: Auditor extends BaseUser</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">По аналогии с примером Admin: класс Auditor наследует от BaseUser, добавляет поле region и переопределяет role() на «аудитор». Метод describe() возвращает имя + роль + регион.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Класс Registry со статическим методом</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">По аналогии с примером AuditLog: класс Registry хранит список записей. Добавьте статический метод countByLevel(entries, level), который возвращает, сколько записей имеют заданный уровень.</div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕСТ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Интерактивный тест для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    Внимательно прочитайте вопрос. В части вопросов нужно выбрать <strong>один</strong> ответ (круглые кнопки),
+    в других — <strong>несколько</strong> верных вариантов (квадратные галочки). Нажмите «Проверить тест» —
+    каждый ответ сразу будет подсвечен зелёным (верно) или красным (неверно) с пояснением.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Какой метод вызывается автоматически при создании объекта через new?</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="radio" name="q1" value="a"> init()</label><br>
+        <label><input type="radio" name="q1" value="b"> create()</label><br>
+        <label><input type="radio" name="q1" value="c"> constructor()</label><br>
+        <div class="explain" data-explain="q1" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Какой оператор создаёт экземпляр класса? (выберите один)</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="radio" name="q2" value="a"> class</label><br>
+        <label><input type="radio" name="q2" value="b"> new</label><br>
+        <label><input type="radio" name="q2" value="c"> this</label><br>
+        <div class="explain" data-explain="q2" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Какие утверждения о приватных полях верны? (выберите все)</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="checkbox" name="q3" value="a"> Поле начинается с символа #</label><br>
+        <label><input type="checkbox" name="q3" value="b"> К полю можно обратиться снаружи через точку</label><br>
+        <label><input type="checkbox" name="q3" value="c"> Поле доступно только внутри класса</label><br>
+        <label><input type="checkbox" name="q3" value="d"> Приватные поля поддерживают инкапсуляцию</label><br>
+        <div class="explain" data-explain="q3" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Какое ключевое слово вызывает конструктор родительского класса?</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="radio" name="q4" value="a"> this()</label><br>
+        <label><input type="radio" name="q4" value="b"> super()</label><br>
+        <label><input type="radio" name="q4" value="c"> parent()</label><br>
+        <div class="explain" data-explain="q4" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Что верно про ключевое слово extends? (выберите все)</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="checkbox" name="q5" value="a"> Указывает, что класс наследует от другого класса</label><br>
+        <label><input type="checkbox" name="q5" value="b"> Дочерний класс получает поля и методы родителя</label><br>
+        <label><input type="checkbox" name="q5" value="c"> Делает класс статическим</label><br>
+        <label><input type="checkbox" name="q5" value="d"> Позволяет переопределять методы родителя</label><br>
+        <div class="explain" data-explain="q5" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Зачем хранить пароль в приватном поле и проверять его через сеттер?</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="radio" name="q6" value="a"> Чтобы пароль было проще читать снаружи</label><br>
+        <label><input type="radio" name="q6" value="b"> Чтобы все данные проходили через одну точку валидации и не «вытекали» наружу</label><br>
+        <label><input type="radio" name="q6" value="c"> Чтобы ускорить работу программы</label><br>
+        <div class="explain" data-explain="q6" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">7</span><h3>Как правильно вызвать статический метод? (выберите один)</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="radio" name="q7" value="a"> Через имя класса: AuditLog.format()</label><br>
+        <label><input type="radio" name="q7" value="b"> Через экземпляр: logger.format()</label><br>
+        <label><input type="radio" name="q7" value="c"> Через приватное поле #format</label><br>
+        <div class="explain" data-explain="q7" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">8</span><h3>Какие особенности верны для геттера с ключевым словом get? (выберите все)</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="checkbox" name="q8" value="a"> Вызывается как обычное свойство, без скобок</label><br>
+        <label><input type="checkbox" name="q8" value="b"> Внутри можно выполнять логику, например маскировать данные</label><br>
+        <label><input type="checkbox" name="q8" value="c"> Удаляет поле объекта</label><br>
+        <label><input type="checkbox" name="q8" value="d"> Обычно используется для контролируемого доступа к приватным полям</label><br>
+        <div class="explain" data-explain="q8" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">9</span><h3>Какая концепция в программировании соответствует принципу «минимальных привилегий» в безопасности?</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="radio" name="q9" value="a"> Наследование</label><br>
+        <label><input type="radio" name="q9" value="b"> Инкапсуляция (скрытие данных)</label><br>
+        <label><input type="radio" name="q9" value="c"> Статические методы</label><br>
+        <div class="explain" data-explain="q9" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">10</span><h3>В чём отличие super.role() от this.role() внутри дочернего класса? (выберите все)</h3></div>
+      <div class="task-questions" style="margin-top:8px;">
+        <label><input type="checkbox" name="q10" value="a"> super.role() вызывает метод родительского класса</label><br>
+        <label><input type="checkbox" name="q10" value="b"> this.role() вызывает метод, определённый в текущем (дочернем) классе</label><br>
+        <label><input type="checkbox" name="q10" value="c"> super.role() и this.role() всегда возвращают одно и то же</label><br>
+        <label><input type="checkbox" name="q10" value="d"> super.role() может обратиться к методу родителя, даже если он переопределён</label><br>
+        <div class="explain" data-explain="q10" style="display:none;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="task" style="background:transparent; border:none; box-shadow:none; padding:0;">
+    <button class="btn" onclick="checkQuiz()">Проверить тест</button>
+    <div id="quiz-result" class="result-box" style="display:none;"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- КОНТРОЛЬНЫЕ ВОПРОСЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="written"><div class="bar"></div><h2>Контрольные вопросы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    Ответьте письменно, развёрнуто, своими словами. При ответе опирайтесь на разобранные примеры и код в лекции. Ответы должны показывать, что вы понимаете логику, а не запомнили формулировку.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Чем класс отличается от экземпляра? Приведите аналогию из жизни и из области безопасности.</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Зачем в конструкторе используется this? Что сохраняется через this.name = name?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Объясните инкапсуляцию на примере приватного поля #token в классе Session. Почему метод isValid() не раскрывает сам токен?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>В чём смысл проверки пароля «изнутри» класса через сеттер и геттер, возвращающий «***»? Как это связано с принципом минимальных привилегий?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Что происходит в классе Admin, когда в конструкторе вызывается super(name)? Почему super() должен идти первым?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Чем отличаются обычные методы, приватные поля и статические методы? Когда уместен статический метод (как в AuditLog.format)?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">7</span><h3>Как наследование позволяет моделировать роли доступа (BaseUser → Admin, Auditor)? Какие преимущества даёт такое наследование?</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">8</span><h3>Что вернёт выражение user.canAccess("delete") для роли viewer? Объясните, как метод это определяет.</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">9</span><h3>Приведите пример из ИБ, где геттер или сеттер помогает защитить данные (токен, пароль, IP-адрес).</h3></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">10</span><h3>Почему для сравнения пароля используется метод check(), а не геттер, возвращающий сам пароль? Что передаётся наружу и почему это безопаснее?</h3></div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ИСТОЧНИКИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Источники</span><h3>Где читать и изучать тему</h3></div>
+    <div class="sources-list">
+      <a href="https://learn.javascript.ru/class" target="_blank"><span class="src-name">learn.javascript.ru — Классы: базовый синтаксис</span><span class="src-desc">Конструктор, поля, методы, new.</span></a>
+      <a href="https://learn.javascript.ru/class-inheritance" target="_blank"><span class="src-name">learn.javascript.ru — Наследование классов</span><span class="src-desc">extends, super, переопределение методов.</span></a>
+      <a href="https://learn.javascript.ru/private-protected-properties-methods" target="_blank"><span class="src-name">learn.javascript.ru — Приватные и защищённые методы</span><span class="src-desc">Инкапсуляция, приватные поля #.</span></a>
+      <a href="https://learn.javascript.ru/static-properties-methods" target="_blank"><span class="src-name">learn.javascript.ru — Статические свойства и методы</span><span class="src-desc">static, применение.</span></a>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code><br>
+      <strong>2.</strong> Скопируйте код примера в файл <code>oop.js</code> и запустите: <code>node oop.js</code><br>
+      <strong>3.</strong> Для своих задач: создайте отдельный файл, например <code>task.js</code><br><br>
+      Классы в Node.js работают без дополнительных настроек — просто сохраните код и запустите файл.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="oop.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+
+function checkQuiz() {
+  var correct = {
+    q1: { type: 'radio', answers: ['c'], explain: 'Метод constructor() вызывается автоматически оператором new при создании экземпляра.' },
+    q2: { type: 'radio', answers: ['b'], explain: 'Экземпляр класса создаётся оператором new: new User(). Без него класс вызвать нельзя.' },
+    q3: { type: 'checkbox', answers: ['a', 'c', 'd'], explain: 'Приватные поля начинаются с #, доступны только внутри класса и реализуют инкапсуляцию. Обратиться к ним снаружи через точку нельзя.' },
+    q4: { type: 'radio', answers: ['b'], explain: 'super(...) вызывает конструктор родительского класса и должен идти первым в теле дочернего конструктора.' },
+    q5: { type: 'checkbox', answers: ['a', 'b', 'd'], explain: 'extends задаёт наследование: дочерний класс получает поля и методы родителя и может их переопределять. Статическим класс extends не делает.' },
+    q6: { type: 'radio', answers: ['b'], explain: 'Сеттер собирает всю валидацию в одной точке, а приватное поле не даёт паролю «утечь» наружу. Скорость тут ни при чём.' },
+    q7: { type: 'radio', answers: ['a'], explain: 'Статические методы принадлежат классу, а не экземпляру, поэтому вызываются через имя класса: AuditLog.format().' },
+    q8: { type: 'checkbox', answers: ['a', 'b', 'd'], explain: 'Геттер вызывается без скобок, внутри него можно выполнять логику (например, маскировать данные) и удобно управлять доступом к приватным полям. Поля он не удаляет.' },
+    q9: { type: 'radio', answers: ['b'], explain: 'Инкапсуляция скрывает внутренние данные — как принцип минимальных привилегий ограничивает доступ. Меньше видно снаружи — меньше риск.' },
+    q10: { type: 'checkbox', answers: ['a', 'b', 'd'], explain: 'super.role() обращается к методу родителя (даже если он переопределён), а this.role() — к методу текущего дочернего класса. Это разные вызовы.' }
+  };
+
+  var score = 0;
+  for (var q in correct) {
+    var spec = correct[q];
+    var wrap = document.querySelector('input[name="' + q + '"]');
+    var inputs = document.querySelectorAll('input[name="' + q + '"]');
+    var groupContainer = wrap.closest('.task-questions');
+
+    if (spec.type === 'radio') {
+      var selected = document.querySelector('input[name="' + q + '"]:checked');
+      var userAns = selected ? [selected.value] : [];
+      var isRight = userAns.length === 1 && spec.answers[0] === userAns[0];
+      if (isRight) score++;
+
+      for (var i = 0; i < inputs.length; i++) {
+        var label = inputs[i].closest('label');
+        label.style.color = 'inherit';
+        label.style.opacity = '1';
+        label.style.textDecoration = '';
+      }
+      if (selected) {
+        var selLabel = selected.closest('label');
+        selLabel.style.color = isRight ? 'var(--good)' : 'var(--bad)';
+        selLabel.style.fontWeight = '700';
+        selLabel.style.textDecoration = isRight ? '' : 'line-through';
+      }
+      var rightInput = document.querySelector('input[name="' + q + '"][value="' + spec.answers[0] + '"]');
+      if (!isRight && rightInput) {
+        var rightLabel = rightInput.closest('label');
+        rightLabel.style.color = 'var(--good)';
+        rightLabel.style.fontWeight = '700';
+      }
+    } else {
+      var checkedVals = [];
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) checkedVals.push(inputs[i].value);
+      }
+      function arraysEqual(a, b) {
+        if (a.length !== b.length) return false;
+        var c = a.slice().sort();
+        var d = b.slice().sort();
+        for (var k = 0; k < c.length; k++) if (c[k] !== d[k]) return false;
+        return true;
+      }
+      var isRight = arraysEqual(checkedVals, spec.answers.slice().sort());
+      if (isRight) score++;
+
+      for (var i = 0; i < inputs.length; i++) {
+        var label = inputs[i].closest('label');
+        var isCorrectOption = spec.answers.indexOf(inputs[i].value) !== -1;
+        var isSelected = inputs[i].checked;
+        label.style.color = isCorrectOption ? 'var(--good)' : '';
+        label.style.fontWeight = isCorrectOption ? '700' : '';
+        label.style.opacity = isCorrectOption ? '1' : '0.55';
+        if (isSelected && !isCorrectOption) {
+          label.style.color = 'var(--bad)';
+          label.style.fontWeight = '700';
+          label.style.textDecoration = 'line-through';
+        }
+      }
+    }
+
+    var explainDiv = groupContainer.querySelector('[data-explain="' + q + '"]');
+    if (explainDiv) {
+      explainDiv.style.display = 'block';
+      explainDiv.textContent = (isRight ? '✓ Верно. ' : '✗ Неверно. ') + spec.explain;
+      explainDiv.style.color = isRight ? 'var(--good)' : 'var(--bad)';
+    }
+  }
+
+  var box = document.getElementById('quiz-result');
+  box.style.display = 'block';
+  box.innerHTML = '<span class="out-label">Результат</span>Вы ответили верно на <strong>' + score + '</strong> из 10 вопросов' +
+    (score >= 8 ? ' — отличный результат!' : score >= 5 ? ' — неплохо, но стоит повторить теорию.' : ' — перечитайте лекцию и попробуйте снова.');
+}
+</script>
+</body>
+</html>

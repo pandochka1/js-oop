@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Математические функции и Random — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Математические функции и Random</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript — Math, случайные числа, округление</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#theory">Теория</a>
+    <a href="#examples">Примеры</a>
+    <a href="#tasks">Задачи</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕОРИЯ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="theory"><div class="bar"></div><h2>Теория</h2></div>
+
+  <details class="theory" open>
+    <summary>Объект Math <span class="src">learn.javascript.ru/number</span></summary>
+    <div class="theory-body">
+      <p>В JavaScript для математических операций предусмотрен встроенный объект <code class="inline">Math</code>. Он содержит набор функций и констант, которые доступны в любой программе без подключения дополнительных библиотек.</p>
+      <p>Все функции Math принимают и возвращают числа. Особенность JavaScript: числа хранятся в двоичном виде, поэтому некоторые десятичные дроби не могут быть представлены точно. На практике это означает <strong>погрешность вычислений</strong>:</p>
+      <pre class="code">0.1 + 0.2
+// 0.30000000000000004 — а не 0.3!</pre>
+      <p>Именно поэтому округление — не просто удобство, а необходимость для работы с деньгами, процентами и измерениями.</p>
+
+      <h4>Три способа округления</h4>
+      <p>Ключевое различие между <code class="inline">Math.floor</code>, <code class="inline">Math.round</code> и <code class="inline">Math.ceil</code> — направление округления для дробных чисел:</p>
+      <table class="theory-table">
+        <tr><th>x</th><th>floor(x)</th><th>round(x)</th><th>ceil(x)</th></tr>
+        <tr><td><code>4.1</code></td><td><code>4</code></td><td><code>4</code></td><td><code>5</code></td></tr>
+        <tr><td><code>4.7</code></td><td><code>4</code></td><td><code>5</code></td><td><code>5</code></td></tr>
+        <tr><td><code>-4.1</code></td><td><code>-5</code></td><td><code>-4</code></td><td><code>-4</code></td></tr>
+        <tr><td><code>-4.7</code></td><td><code>-5</code></td><td><code>-5</code></td><td><code>-4</code></td></tr>
+      </table>
+      <p>Запомните правило: <strong>floor всегда идёт «к началу координатной оси слева», ceil — наоборот</strong>. Для отрицательных чисел поведение кажется «инвертированным» и это часто путает новичков.</p>
+      <p><code class="inline">Math.round(x)</code> округляет по правилам арифметики: дробная часть от 0.5 и выше — вверх, ниже — вниз.</p>
+
+      <h4>Остальные функции</h4>
+      <table class="theory-table">
+        <tr><th>Функция</th><th>Описание</th><th>Пример</th></tr>
+        <tr><td><code>Math.abs(x)</code></td><td>Модуль числа</td><td><code>Math.abs(-7) → 7</code></td></tr>
+        <tr><td><code>Math.sqrt(x)</code></td><td>Квадратный корень</td><td><code>Math.sqrt(25) → 5</code></td></tr>
+        <tr><td><code>Math.pow(x, y)</code></td><td>Возведение x в степень y</td><td><code>Math.pow(2, 3) → 8</code></td></tr>
+        <tr><td><code>Math.min(a, b, ...)</code></td><td>Минимальное из переданных</td><td><code>Math.min(5, 2, 8) → 2</code></td></tr>
+        <tr><td><code>Math.max(a, b, ...)</code></td><td>Максимальное из переданных</td><td><code>Math.max(5, 2, 8) → 8</code></td></tr>
+        <tr><td><code>Math.trunc(x)</code></td><td>Отбрасывает дробную часть (как floor для положительных)</td><td><code>Math.trunc(4.7) → 4</code></td></tr>
+      </table>
+
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Математические функции важны в ИБ: расчёт энтропии пароля, оценка сложности перебора, анализ статистики трафика, вычисление доверительных интервалов при аудите логов.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Генерация случайных чисел <span class="src">MDN — Math.random</span></summary>
+    <div class="theory-body">
+      <p><code class="inline">Math.random()</code> — функция, которая возвращает псевдослучайное число в диапазоне <strong>от 0 (включительно) до 1 (исключительно)</strong>. Каждый вызов возвращает новое число.</p>
+      <p>Чтобы получить число в нужном диапазоне, используются формулы:</p>
+      <pre class="code">// Случайное число от 0 до max-1
+Math.floor(Math.random() * max)
+
+// Случайное число от 0 до max (включительно)
+Math.floor(Math.random() * (max + 1))
+
+// Случайное число от min до max (включительно)
+Math.floor(Math.random() * (max - min + 1)) + min</pre>
+      <p>Формула работает за счёт того, что <code class="inline">Math.random()</code> даёт дробь от 0 до 0,999... Умножение на <code class="inline">(max - min + 1)</code> растягивает диапазон, а <code class="inline">Math.floor</code> отбрасывает дробную часть — получается целое число.</p>
+      <p>Важно помнить: <code class="inline">Math.random()</code> — псевдослучайная, а не криптостойкая. Для задач, требующих настоящей случайности (генерация паролей, токенов), используют <code class="inline">crypto.getRandomValues()</code>, но для учебных задач <code class="inline">Math.random()</code> подходит.</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body"><code class="inline">Math.random()</code> не подходит для криптографических целей, так как её можно предсказать. Для генерации токенов, паролей и сессионных ключей в production используйте <code class="inline">crypto.getRandomValues()</code>.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Константы Math и полезные приёмы</summary>
+    <div class="theory-body">
+      <p>Math также содержит математические константы:</p>
+      <table class="theory-table">
+        <tr><th>Константа</th><th>Приблизительное значение</th><th>Описание</th></tr>
+        <tr><td><code>Math.PI</code></td><td>3.14159</td><td>Число π</td></tr>
+        <tr><td><code>Math.E</code></td><td>2.71828</td><td>Основание натурального логарифма</td></tr>
+      </table>
+      <p>Эти константы могут пригодиться при вычислениях, связанных с геометрией — например, при определении длины окружности (C = 2πR).</p>
+    </div>
+  </details>
+
+  <!-- ============================================================ -->
+  <!-- ПРИМЕРЫ С РАЗБОРОМ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>Примеры с пошаговым разбором</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 1</span>
+      <h3>Округление чисел</h3>
+    </div>
+    <div class="task-text">
+      Сравнить результаты <code>Math.floor()</code>, <code>Math.round()</code> и <code>Math.ceil()</code> для одного и того же числа. Разберем, как каждый из них работает с положительными и отрицательными числами.
+    </div>
+    <pre class="code">let x = 4.7;
+Math.floor(x);  // 4 — вниз
+Math.round(x);  // 5 — арифметическое
+Math.ceil(x);   // 5 — вверх</pre>
+    <div class="controls">
+      <div class="field"><label>Число</label><input type="number" id="ex1-n" value="4.7" step="0.1"></div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 2</span>
+      <h3>Случайные числа в диапазоне</h3>
+    </div>
+    <div class="task-text">
+      Сгенерировать 5 случайных целых чисел в заданном диапазоне. Используем <code>Math.random()</code> и <code>Math.floor()</code>.
+    </div>
+    <pre class="code">function randomInRange(min, max) {
+  let range = max - min + 1;
+  return Math.floor(Math.random() * range) + min;
+}</pre>
+    <div class="controls">
+      <div class="field"><label>От</label><input type="number" id="ex2-min" value="1"></div>
+      <div class="field"><label>До</label><input type="number" id="ex2-max" value="100"></div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 3</span>
+      <h3>Math.min, Math.max, Math.pow</h3>
+    </div>
+    <div class="task-text">
+      Используем <code>Math.min()</code> для нахождения меньшего числа, <code>Math.max()</code> — для большего, <code>Math.pow()</code> — для возведения в степень.
+    </div>
+    <pre class="code">Math.min(10, 3);     // 3
+Math.max(10, 3);     // 10
+Math.pow(2, 5);      // 32</pre>
+    <div class="controls">
+      <div class="field"><label>Число A</label><input type="number" id="ex3-a" value="10"></div>
+      <div class="field">
+        <label>Операция</label>
+        <select id="ex3-op">
+          <option value="min">min</option>
+          <option value="max" selected>max</option>
+          <option value="pow">pow</option>
+        </select>
+      </div>
+      <div class="field"><label>Число B</label><input type="number" id="ex3-b" value="3"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 4</span>
+      <h3>Модуль и квадратный корень</h3>
+    </div>
+    <div class="task-text">
+      Используем <code>Math.abs()</code> для нахождения модуля и <code>Math.sqrt()</code> для квадратного корня.
+    </div>
+    <pre class="code">Math.abs(-25);       // 25
+Math.sqrt(25);       // 5</pre>
+    <div class="controls">
+      <div class="field"><label>Число</label><input type="number" id="ex4-n" value="-25"></div>
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ЗАДАЧИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    8 задач. В каждой нужно применить математические функции в сочетании с условным оператором и/или циклами.
+    Код задач в файл не включен — пишите всё самостоятельно.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Округление и сравнение</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить дробное число. Вывести его floor, ceil, round. Затем определить, какое из трёх округлённых значений находится ближе всего к исходному числу, используя Math.abs() и if.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Посчитайте три модуля разности: |x - floor|, |x - ceil|, |x - round|. Чем меньше разность — тем ближе результат. Сравните их через if-else if и выведите победителя. Для x = 4.7 разности будут: 0.7, 0.3, 0.3 — ближе всех ceil (0.3) и round (0.3).</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Случайная карта</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Сгенерировать случайное число от 1 до 52 (колода карт). Используя switch, определить масть (1–13 пики, 14–26 червы, 27–39 бубны, 40–52 трефы) и достоинство (1 — туз, 11 — валет, 12 — дама, 13 — король). Вывести название карты.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Сначала через switch определите масть по диапазону. Затем вычислите номер достоинства: остаток от деления на 13, где 1 — туз, 11–13 — картинки. Используйте <code>Math.floor(Math.random() * 52) + 1</code> для генерации. Это классическая задача на связку switch + Math.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Угадай число (против компьютера)</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Компьютер загадывает случайное число от 1 до 100. Пользователь вводит свои варианты, пока не угадает. После каждой попытки программа сообщает «больше» или «меньше». В конце вывести количество попыток.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Загадайте число: <code>Math.floor(Math.random() * 100) + 1</code>. Организуйте цикл do…while: ввод пользователя, проверка if (guess &lt; target) — «больше», if (guess &gt; target) — «меньше». Счётчик попыток увеличивайте на каждой итерации. Цикл завершается, когда guess === target.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Статистика случайных чисел</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Сгенерировать 1000 случайных чисел от 0 до 9. Посчитать, сколько раз выпало каждая цифра. Результат выведите: ноль — 98 раз, один — 105 раз и т.д.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Заведите 10 переменных-счётчиков (или один массив count[10]). В цикле for 1000 раз сгенерируйте число и увеличьте соответствующий счётчик: <code>count[digit]++</code>. В конце выведите все счётчики. Ожидайте: каждая цифра выпадает примерно 100 раз (равномерное распределение).</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Целочисленное деление</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить два числа A и B. Вывести результат деления A на B с точностью до двух знаков после запятой, используя Math.round().</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Приём «округление до N знаков»: умножьте результат на 10 в нужной степени, округлите, разделите обратно. Для двух знаков: <code>Math.round(result * 100) / 100</code>. Не забудьте проверить, что B ≠ 0, через if.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Гипотенуза треугольника</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить длины двух катетов прямоугольного треугольника. Вычислить гипотенузу по теореме Пифагора (c = √(a² + b²)) через Math.sqrt() и Math.pow(). С помощью if проверьте, что катеты положительны.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Формула: <code>c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))</code>. Сначала проверьте if (a &gt; 0 &amp;&amp; b &gt; 0) — длины сторон не могут быть отрицательными. В противном случае выведите ошибку. Округлите результат до 2–3 знаков.</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">7</span><h3>Симуляция броска кубика</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Смоделировать 1000 бросков двух шестигранных кубиков (d6). Посчитать, сколько раз выпала каждая сумма от 2 до 12.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Сумма двух кубиков — от 2 до 12. Заведите массив счётчиков <code>count[13]</code> (индексы 2–12). В цикле for 1000 раз: генерируйте два числа 1–6, складывайте, увеличивайте <code>count[sum]++</code>. Математическое ожидание: наибольшая вероятность у суммы 7 (6 комбинаций из 36).</div>
+      </details>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">8</span><h3>Проверка распределения случайных чисел</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Сгенерировать 10000 случайных чисел от 0 до 1 через Math.random(). Разделить диапазон [0,1) на 10 интервалов по 0.1. Посчитать, сколько чисел попало в каждый интервал. Вывести таблицу.</div>
+      <details class="hint">
+        <summary>Пояснение</summary>
+        <div class="hint-body">Номер интервала = <code>Math.floor(value * 10)</code>. Например, 0.37 → 3 (интервал 0.3–0.4). Заведите массив из 10 счётчиков, заполняйте в цикле, затем выведите гистограмму. Если Math.random() корректна — в каждом интервале примерно по 1000 значений.</div>
+      </details>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ВОПРОСЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">Ответьте письменно или устно, сверившись с теорией.</p>
+
+  <div class="tasks-list">
+    <div class="task"><div class="task-head"><span class="num">1</span><h3>Чем различаются Math.floor(), Math.round() и Math.ceil() для положительных и отрицательных чисел?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">2</span><h3>Как получить случайное целое число от 5 до 15 включительно? Запишите формулу.</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">3</span><h3>Почему Math.random() не подходит для криптографических целей? Какой метод использовать вместо него?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">4</span><h3>Что делает Math.abs()? Как вручную получить модуль числа без этой функции?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">5</span><h3>Как округлить число 3.14159 до двух знаков после запятой?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">6</span><h3>В каких реальных задачах кибербезопасности нужна генерация случайных чисел?</h3></div></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ИСТОЧНИКИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Источники</span><h3>Где читать и изучать тему</h3></div>
+    <div class="sources-list">
+      <a href="https://learn.javascript.ru/number" target="_blank"><span class="src-name">learn.javascript.ru — Числа</span><span class="src-desc">Math, округление, случайные числа.</span></a>
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math" target="_blank"><span class="src-name">MDN — Math (полный справочник)</span><span class="src-desc">Все функции и константы Math с примерами.</span></a>
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random" target="_blank"><span class="src-name">MDN — Math.random()</span><span class="src-desc">Генерация случайных чисел, особенности, замена для криптографии.</span></a>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code><br>
+      <strong>2.</strong> Для проверки готовых примеров: <code>node math.js</code><br>
+      <strong>3.</strong> Для своих задач: создайте файл и запустите: <code>node task.js</code><br><br>
+      Не забудьте: <code>prompt()</code> для ввода, <code>console.log()</code> для вывода.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="math.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

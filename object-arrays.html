@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Массивы объектов — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Массивы объектов</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript — наборы записей с полями</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#theory">Теория</a>
+    <a href="#examples">Примеры</a>
+    <a href="#tasks">Задачи</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕОРИЯ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="theory"><div class="bar"></div><h2>Теория</h2></div>
+
+  <details class="theory" open>
+    <summary>Что такое массив объектов <span class="src">learn.javascript.ru/object</span></summary>
+    <div class="theory-body">
+      <p>Мы уже знаем два инструмента: массив хранит набор однотипных значений, объект — набор полей с именами. Реальная логика очень часто требует совместить их: хранить <strong>несколько записей с одинаковым набором полей</strong>. Для этого служит массив объектов.</p>
+      <p>Представьте таблицу: строки — это записи, столбцы — поля. Массив объектов — «таблица», где каждая строка (объект) имеет одни и те же столбцы (поля):</p>
+      <pre class="code">let users = [
+  { name: "Олег", age: 21, role: "user" },
+  { name: "Мария", age: 30, role: "admin" },
+  { name: "Пётр", age: 17, role: "user" }
+];</pre>
+      <p>Снаружи квадратные скобки — массив. Внутри, между фигурными скобками каждой записи, — объект с полями. Обращение к полю конкретной записи — двойное: сначала по индексу массива, затем по имени поля через точку.</p>
+      <pre class="code">users[0].name;   // "Олег" — первая запись, поле name
+users[1].role;   // "admin" — вторая запись, поле role</pre>
+      <p>Ничего нового в этом нет: это уже знакомые записи массива и обращение к полям объектов, соединённые вместе.</p>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Массив объектов — естественная модель для данных ИБ: список пользователей системы, журнал событий, записи о сетевых соединениях. Поля записей в точности соответствуют столбцам логов, которые собирает SIEM.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Создание и запись в массив объектов</summary>
+    <div class="theory-body">
+      <p>Массив объектов можно объявить сразу значениями или заполнять постепенно:</p>
+      <pre class="code">let events = [];
+
+events.push({ source: "192.168.1.1", level: "warn", code: 403 });
+events.push({ source: "10.0.0.5", level: "info", code: 200 });
+events.push({ source: "192.168.1.1", level: "error", code: 500 });
+
+console.log(events[2].source); // 192.168.1.1
+console.log(events[1].code);   // 200</pre>
+      <p>Каждый <code class="inline">push</code> добавляет новую запись в конец. Так строится «живой» журнал, который наполняется по мере работы.</p>
+      <p>Поле существующей записи можно изменить или добавить:</p>
+      <pre class="code">events[0].code = 403;          // изменить существующее поле
+events[0].handled = false;      // добавить новое поле</pre>
+      <p>Поскольку массив — это ссылочный тип, добавление во вложенный объект работает через общий массив.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Перебор массива объектов</summary>
+    <div class="theory-body">
+      <p>Перебор массива объектов ничем не отличается от перебора обычных чисел — цикл <code class="inline">for</code> с индексом, только внутри мы работаем с объектом по индексу:</p>
+      <pre class="code">let users = [
+  { name: "Олег", age: 21 },
+  { name: "Мария", age: 30 }
+];
+
+for (let i = 0; i < users.length; i++) {
+  console.log(users[i].name + " — " + users[i].age);
+}</pre>
+      <p>Внутри цикла <code class="inline">users[i]</code> — это объект, поэтому к его полям обращаемся через точку: <code class="inline">users[i].name</code>, <code class="inline">users[i].age</code>.</p>
+      <p>Такой обход — база для всех дальнейших операций: поиска по полю, фильтрации, подсчёта значений, сортировки. Любимый приём — накопление результата в отдельной переменной, как и с массивами чисел.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Поиск и фильтрация по полю</summary>
+    <div class="theory-body">
+      <p>Поиск записи по значению поля повторяет алгоритм поиска в массиве, только сравниваем мы не весь элемент, а его поле:</p>
+      <pre class="code">let found = -1;
+for (let i = 0; i < users.length; i++) {
+  if (users[i].name === "Мария") {
+    found = i;
+    break;
+  }
+}</pre>
+      <p>Фильтрация строит новый массив, в который попадают записи, удовлетворяющие условию по полю:</p>
+      <pre class="code">let adults = [];
+for (let i = 0; i < users.length; i++) {
+  if (users[i].age >= 18) {
+    adults.push(users[i]);
+  }
+}</pre>
+      <p>Условие можно строить по любому полю и комбинировать поля, связывая проверки логическими операторами из темы про условия.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Сортировка массива объектов по полю</summary>
+    <div class="theory-body">
+      <p>Сортировка объектов выполняется тем же способом, что и чисел, но сравнение идёт по одному полю. Возьмём сортировку пузырьком, где обмениваются местами целые записи, если их поля стоят в неправильном порядке:</p>
+      <pre class="code">let users = [
+  { name: "Олег", age: 21 },
+  { name: "Мария", age: 30 },
+  { name: "Пётр", age: 17 }
+];
+
+for (let i = 0; i < users.length - 1; i++) {
+  for (let j = 0; j < users.length - 1 - i; j++) {
+    if (users[j].age > users[j + 1].age) {
+      let temp = users[j];
+      users[j] = users[j + 1];
+      users[j + 1] = temp;
+    }
+  }
+}
+
+// Теперь порядок по возрасту: Пётр(17), Олег(21), Мария(30)</pre>
+      <p>Ключевая строка — условие <code class="inline">users[j].age &gt; users[j + 1].age</code>: сравниваются именно поля <code class="inline">age</code>. Меняются целиком объекты, а не только числа. Чтобы сортировать по другому полю, достаточно заменить <code class="inline">age</code> на нужное имя.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Агрегация значений поля</summary>
+    <div class="theory-body">
+      <p>Когда нужно посчитать что-то по всем записям — сумму, среднее, минимум, максимум — берут одно поле и накапливают результат:</p>
+      <pre class="code">let users = [
+  { name: "Олег", score: 85 },
+  { name: "Мария", score: 92 },
+  { name: "Пётр", score: 78 }
+];
+
+let sum = 0;
+for (let i = 0; i < users.length; i++) {
+  sum += users[i].score;
+}
+
+console.log(sum);           // 255
+console.log(sum / users.length); // 85 — среднее</pre>
+      <p>Так же вычисляются статистика по логам (среднее время ответа), суммарный размер скачанных данных по IP-адресу, число сработавших алертов за смену.</p>
+    </div>
+  </details>
+
+  <!-- ============================================================ -->
+  <!-- ПРИМЕРЫ С РАЗБОРОМ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>Примеры с пошаговым разбором</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 1</span>
+      <h3>Создание массива объектов и доступ к полям</h3>
+    </div>
+    <div class="task-text">
+      Объявить массив из нескольких пользователей и вывести поля каждой записи через индекс и точку.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", age: 21, role: "user" },
+  { name: "Мария", age: 30, role: "admin" }
+];
+
+console.log(users[0].name);   // Олег
+console.log(users[0].age);    // 21
+console.log(users[1].role);   // admin</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let users = [ ... ];</td><td class="line-desc">Объявляем массив. Каждый элемент в квадратных скобках — объект в фигурных скобках с одинаковыми полями (name, age, role).</td></tr>
+        <tr><td class="line-code">users[0].name</td><td class="line-desc">Берём первую запись (индекс 0) и читаем её поле name → "Олег".</td></tr>
+        <tr><td class="line-code">users[0].age</td><td class="line-desc">Поле age первой записи → 21.</td></tr>
+        <tr><td class="line-code">users[1].role</td><td class="line-desc">Вторая запись (индекс 1), поле role → "admin".</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 2</span>
+      <h3>Поиск объекта по значению поля</h3>
+    </div>
+    <div class="task-text">
+      Найти пользователя по имени и вывести его данные. Используем поиск по полю name с break при совпадении.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", age: 21, role: "user" },
+  { name: "Мария", age: 30, role: "admin" },
+  { name: "Пётр", age: 17, role: "user" }
+];
+
+let target = "Мария";
+let found = -1;
+
+for (let i = 0; i < users.length; i++) {
+  if (users[i].name === target) {
+    found = i;
+    break;
+  }
+}
+
+console.log(found);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let users = [ ... ]</td><td class="line-desc">Массив объектов-пользователей.</td></tr>
+        <tr><td class="line-code">let target = "Мария";</td><td class="line-desc">Имя, которое ищем (значение поля name).</td></tr>
+        <tr><td class="line-code">let found = -1;</td><td class="line-desc">Переменная для индекса. -1 — «пока не нашли».</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; users.length; i++)</td><td class="line-desc">Перебираем все записи.</td></tr>
+        <tr><td class="line-code">if (users[i].name === target)</td><td class="line-desc">Сравниваем поле name текущей записи с искомым именем.</td></tr>
+        <tr><td class="line-code">found = i; break;</td><td class="line-desc">Запоминаем индекс и прерываем цикл — нашли первое совпадение.</td></tr>
+        <tr><td class="line-code">console.log(found);</td><td class="line-desc">Выводим индекс найденной записи (1).</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Имя</label><input type="text" id="ex2-name" value="Мария"></div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 3</span>
+      <h3>Фильтрация по полю age</h3>
+    </div>
+    <div class="task-text">
+      Отобрать в новый массив только совершеннолетних пользователей (age &gt;= 18).
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", age: 21 }, { name: "Мария", age: 30 },
+  { name: "Пётр", age: 17 }, { name: "Анна", age: 25 }
+];
+
+let adults = [];
+
+for (let i = 0; i < users.length; i++) {
+  if (users[i].age >= 18) {
+    adults.push(users[i]);
+  }
+}
+
+console.log(adults);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let adults = [];</td><td class="line-desc">Новый пустой массив для результата.</td></tr>
+        <tr><td class="line-code">for (... i &lt; users.length ...)</td><td class="line-desc">Перебираем все записи исходного массива.</td></tr>
+        <tr><td class="line-code">if (users[i].age >= 18)</td><td class="line-desc">Условие фильтра по полю age: запись проходит, если возраст не меньше 18.</td></tr>
+        <tr><td class="line-code">adults.push(users[i]);</td><td class="line-desc">Добавляем целую запись (объект) в результирующий массив.</td></tr>
+        <tr><td class="line-code">console.log(adults);</td><td class="line-desc">Выводим отфильтрованный массив (3 записи).</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 4</span>
+      <h3>Сортировка по полю age</h3>
+    </div>
+    <div class="task-text">
+      Отсортировать массив объектов по возрасту по возрастанию, используя сортировку пузырьком по полю age.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", age: 21 }, { name: "Мария", age: 30 },
+  { name: "Пётр", age: 17 }, { name: "Анна", age: 25 }
+];
+
+for (let i = 0; i < users.length - 1; i++) {
+  for (let j = 0; j < users.length - 1 - i; j++) {
+    if (users[j].age > users[j + 1].age) {
+      let temp = users[j];
+      users[j] = users[j + 1];
+      users[j + 1] = temp;
+    }
+  }
+}
+
+console.log(users);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">for (let i = 0; i &lt; users.length - 1; i++)</td><td class="line-desc">Внешний цикл — число проходов сортировки.</td></tr>
+        <tr><td class="line-code">for (let j = 0; j &lt; users.length - 1 - i; j++)</td><td class="line-desc">Внутренний цикл — сравнение соседних записей; граница короче с каждым проходом.</td></tr>
+        <tr><td class="line-code">if (users[j].age &gt; users[j + 1].age)</td><td class="line-desc">Ключевое отличие от чисел: сравниваются поля age соседних записей.</td></tr>
+        <tr><td class="line-code">let temp = users[j]; users[j] = users[j+1]; users[j+1] = temp;</td><td class="line-desc">Обмен местами двух целых объектов через временную переменную.</td></tr>
+        <tr><td class="line-code">console.log(users);</td><td class="line-desc">Выводим отсортированный массив.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 5</span>
+      <h3>Сумма и среднее по полю score</h3>
+    </div>
+    <div class="task-text">
+      Вычислить сумму и среднее арифметическое поля score по всем записям массива.
+    </div>
+    <pre class="code">let users = [
+  { name: "Олег", score: 85 }, { name: "Мария", score: 92 },
+  { name: "Пётр", score: 78 }, { name: "Анна", score: 88 }
+];
+
+let sum = 0;
+
+for (let i = 0; i < users.length; i++) {
+  sum += users[i].score;
+}
+
+let avg = sum / users.length;
+console.log("Сумма:", sum);
+console.log("Среднее:", avg);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let sum = 0;</td><td class="line-desc">Накопитель суммы.</td></tr>
+        <tr><td class="line-code">for (... i &lt; users.length ...)</td><td class="line-desc">Перебираем все записи.</td></tr>
+        <tr><td class="line-code">sum += users[i].score;</td><td class="line-desc">Прибавляем именно поле score текущей записи.</td></tr>
+        <tr><td class="line-code">let avg = sum / users.length;</td><td class="line-desc">Среднее = сумма / число записей.</td></tr>
+        <tr><td class="line-code">console.log(...)</td><td class="line-desc">Выводим сумму и среднее.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex5()">Проверить</button>
+    </div>
+    <div id="ex5-trace" class="trace"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ЗАДАЧИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    5 задач по мотивам разобранных примеров. Используйте изученные операции: перебор, поиск по полю, фильтрацию, сортировку, агрегацию.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Список имён</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив объектов { name, age }. Вывести в консоль только имена всех пользователей (по одному на строку). Приём — перебор с обращением users[i].name.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Самый старший</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив объектов { name, age }. Найти и вывести имя самого старшего пользователя. Приём — как поиск максимума по числам, но сравниваем поле age и запоминаем объект/имя.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Администраторы</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив объектов { name, role }. Создать новый массив только из тех записей, чья роль === "admin". Приём — фильтрация по полю role, как в примере 3.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Сортировка по имени</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив объектов { name, age }. Отсортировать его по имени (поле name) в алфавитном порядке. В условии пузырька используйте сравнение строк: users[j].name &gt; users[j+1].name.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Суммарные баллы</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив объектов { name, score }. Посчитать средний балл и вывести имена всех, чей балл выше среднего. Приём — два прохода: первый считает среднее (пример 5), второй фильтрует (пример 3).</div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ВОПРОСЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">Ответьте письменно, своими словами, сверившись с теорией и примерами.</p>
+
+  <div class="tasks-list">
+    <div class="task"><div class="task-head"><span class="num">1</span><h3>Почему массив объектов удобнее, чем несколько отдельных переменных, для хранения списка пользователей?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">2</span><h3>Как обратиться к полю role третьей записи массива users?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">3</span><h3>Что изменяется в сортировке пузырьком, когда вместо чисел сортируются объекты?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">4</span><h3>В чём разница между поиском по всему элементу и поиском по полю?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">5</span><h3>Что хранит конкретная запись в массиве объектов — значение или ссылку? Как это влияет на изменение полей?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">6</span><h3>Как вычислить средний балл по полю score за один проход? А за два — что можно добавить?</h3></div></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ИСТОЧНИКИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Источники</span><h3>Где читать и изучать тему</h3></div>
+    <div class="sources-list">
+      <a href="https://learn.javascript.ru/object" target="_blank"><span class="src-name">learn.javascript.ru — Объекты</span><span class="src-desc">Создание объектов, доступ к полям.</span></a>
+      <a href="https://learn.javascript.ru/array" target="_blank"><span class="src-name">learn.javascript.ru — Массивы</span><span class="src-desc">Перебор и методы массивов, на которых строится работа с массивами объектов.</span></a>
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank"><span class="src-name">MDN — Array</span><span class="src-desc">Справочник по методам массивов.</span></a>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code><br>
+      <strong>2.</strong> Скопируйте готовое решение в файл и запустите: <code>node task.js</code><br>
+      <strong>3.</strong> Для проверки примеров урока: <code>node object-arrays.js</code><br><br>
+      Массивы объектов в Node.js работают без настроек — просто сохраните код и запустите.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="object-arrays.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

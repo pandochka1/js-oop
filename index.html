@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Lab — учебник JavaScript</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+    <span class="icon" id="theme-icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <h1 class="hero-title">
+        <span class="hero-js">
+          <span class="hero-char" style="animation-delay:0.0s">J</span>
+          <span class="hero-char" style="animation-delay:0.06s">a</span>
+          <span class="hero-char" style="animation-delay:0.12s">v</span>
+          <span class="hero-char" style="animation-delay:0.18s">a</span>
+          <span class="hero-char" style="animation-delay:0.24s">S</span>
+          <span class="hero-char" style="animation-delay:0.30s">c</span>
+          <span class="hero-char" style="animation-delay:0.36s">r</span>
+          <span class="hero-char" style="animation-delay:0.42s">i</span>
+          <span class="hero-char" style="animation-delay:0.48s">p</span>
+          <span class="hero-char" style="animation-delay:0.54s">t</span>
+        </span>
+        <span class="hero-lab">
+          <span class="hero-char accent" style="animation-delay:0.6s">L</span>
+          <span class="hero-char accent" style="animation-delay:0.66s">a</span>
+          <span class="hero-char accent" style="animation-delay:0.72s">b</span>
+        </span>
+        <span class="hero-cursor">_</span>
+      </h1>
+      <p class="hero-sub">Интерактивный учебник: теория, разбор примеров и задачи для самостоятельной работы</p>
+      <div class="hero-status-bar">
+        <span class="hero-status">Доступно <strong id="hero-topics-count">0</strong> тем</span>
+        <span class="hero-status-sep">·</span>
+        <span class="hero-status">Всего <strong id="hero-tasks-count">0</strong> задач</span>
+        <span class="hero-status-sep">·</span>
+        <span class="hero-status">Начало: <strong>сентябрь 2026</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="topics">
+    <div class="topics-grid">
+
+      <a class="topic-card active" href="uslovny-operator.html" data-tilt data-tasks="10">
+        <div class="topic-num">Тема 01</div>
+        <h2>Условный оператор</h2>
+        <p>Сравнение, логические операторы, if / else / else if, switch и тернарный оператор. Программа учится принимать решения.</p>
+        <div class="topic-tags">
+          <span>if</span><span>else</span><span>switch</span><span>тернарный</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="cikly.html" data-tilt data-tasks="10">
+        <div class="topic-num">Тема 02</div>
+        <h2>Циклы</h2>
+        <p>for, while, do…while. Повторение действий, условные циклы, break/continue, выбор подходящего типа цикла.</p>
+        <div class="topic-tags">
+          <span>for</span><span>while</span><span>do…while</span><span>break</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="math.html" data-tilt data-tasks="8">
+        <div class="topic-num">Тема 03</div>
+        <h2>Математические функции и Random</h2>
+        <p>Math.floor/round/ceil, Math.random, генерация случайных чисел в диапазоне, математические вычисления с условиями и циклами.</p>
+        <div class="topic-tags">
+          <span>Math</span><span>random</span><span>floor</span><span>abs</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="arrays.html" data-tilt data-tasks="8">
+        <div class="topic-num">Тема 04</div>
+        <h2>Массивы</h2>
+        <p>Создание, доступ к элементам, методы массивов, обход циклом и обработка наборов данных.</p>
+        <div class="topic-tags">
+          <span>push</span><span>pop</span><span>indexOf</span><span>for</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="arrays-tasks.html" data-tilt data-tasks="6">
+        <div class="topic-num">Тема 05</div>
+        <h2>Типовые задачи с массивами</h2>
+        <p>10 разобранных задач: агрегация, поиск, разворот, фильтрация, сдвиг и сортировка (пузырьком и выбором).</p>
+        <div class="topic-tags">
+          <span>сумма</span><span>максимум</span><span>сортировка</span><span>фильтр</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="object-arrays.html" data-tilt data-tasks="5">
+        <div class="topic-num">Тема 06</div>
+        <h2>Массивы объектов</h2>
+        <p>Наборы записей с полями: перебор, поиск по полю, фильтрация, сортировка и агрегация данных.</p>
+        <div class="topic-tags">
+          <span>объекты</span><span>поиск</span><span>сортировка</span><span>агрегация</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="object-arrays-tasks.html" data-tilt data-tasks="6">
+        <div class="topic-num">Тема 07</div>
+        <h2>Типовые задачи с массивами объектов</h2>
+        <p>10 разобранных задач с prompt-вводом и выводом через шаблонные строки: поиск, фильтрация, сортировка, агрегация объектов.</p>
+        <div class="topic-tags">
+          <span>prompt</span><span>шаблонные строки</span><span>поиск</span><span>фильтр</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="oop.html" data-tilt data-tasks="5">
+        <div class="topic-num">Тема 08</div>
+        <h2>Классы в JavaScript</h2>
+        <p>Объектно&#8209;ориентированное программирование, часть 1: конструктор, методы, приватные поля, инкапсуляция, наследование.</p>
+        <div class="topic-tags">
+          <span>class</span><span>constructor</span><span>extends</span><span>private</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <a class="topic-card active" href="classes-tasks.html" data-tilt data-tasks="5">
+        <div class="topic-num">Тема 09</div>
+        <h2>Решение задач с классами</h2>
+        <p>Практическое занятие: 5 задач, разбираемых на уроке с подробным разбором, и 5 задач на дом.</p>
+        <div class="topic-tags">
+          <span>классы</span><span>prompt</span><span>шаблонные строки</span><span>практика</span>
+        </div>
+        <div class="topic-status">Открыть тему</div>
+      </a>
+
+      <div class="topic-card disabled">
+        <div class="topic-num">Тема 10</div>
+        <h2>ООП: продолжение</h2>
+        <p>Дальнейшие лекции по объектно&#8209;ориентированному программированию: геттеры, статические методы, композиция.</p>
+        <div class="topic-tags">
+          <span>классы</span><span>ООП</span>
+        </div>
+        <div class="topic-status"><span class="soon">Скоро</span></div>
+      </div>
+
+      <div class="topic-card disabled">
+        <div class="topic-num">Тема 11</div>
+        <h2>Следующие темы</h2>
+        <p>Материалы в разработке — скоро здесь появятся новые разделы.</p>
+        <div class="topic-tags">
+          <span>в планах</span>
+        </div>
+        <div class="topic-status"><span class="soon">Скоро</span></div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+  <footer class="site-foot">
+    JavaScript Lab · учебные материалы по JavaScript для кибербезопасности · ФГОС СПО
+  </footer>
+
+<script>
+(function() {
+  var cards = document.querySelectorAll('[data-tilt]');
+  for (var i = 0; i < cards.length; i++) {
+    (function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var rotateX = (y - rect.height / 2) / rect.height * -8;
+        var rotateY = (x - rect.width / 2) / rect.width * 8;
+        card.style.transform = 'perspective(700px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+      });
+    })(cards[i]);
+  }
+
+  var activeCards = document.querySelectorAll('.topic-card.active');
+  var topicsCount = activeCards.length;
+  var tasksCount = 0;
+  for (var j = 0; j < activeCards.length; j++) {
+    var t = parseInt(activeCards[j].getAttribute('data-tasks'));
+    if (!isNaN(t)) tasksCount += t;
+  }
+
+  var elTopics = document.getElementById('hero-topics-count');
+  var elTasks = document.getElementById('hero-tasks-count');
+  if (elTopics) elTopics.textContent = topicsCount;
+  if (elTasks) elTasks.textContent = tasksCount;
+})();
+
+(function() {
+  var label = document.getElementById('theme-label');
+  function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+  function applyTheme(theme) {
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    if (label) label.textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+  }
+  function toggleTheme() {
+    var next = getTheme() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('js-theme', next);
+    applyTheme(next);
+  }
+  applyTheme(getTheme());
+  window.toggleTheme = toggleTheme;
+})();
+</script>
+</body>
+</html>

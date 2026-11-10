@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Типовые задачи с массивами — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Типовые задачи с одномерными массивами</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript — 10 разобранных задач, включая сортировку</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#examples">Разбор задач</a>
+    <a href="#tasks">Задачи для самостоятельной работы</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ПРИМЕРЫ С РАЗБОРОМ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>10 задач с пошаговым разбором</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">
+    Каждая задача дана с полным готовым кодом, который можно скопировать, вставить в файл и запустить в Node.js.
+    Ниже — интерактивная версия, где можно поменять входные данные и посмотреть пошаговое выполнение.
+  </p>
+
+  <!-- Задача 1 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 1</span><h3>Сумма и среднее арифметическое</h3></div>
+    <div class="task-text">
+      Вычислить сумму всех элементов массива и их среднее арифметическое. Классическая агрегация: в отдельной переменной накапливаем сумму, затем делим на длину.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> переменная <code>sum</code> обнуляется, цикл проходит по массиву и прибавляет каждый элемент. Среднее = <code>sum / arr.length</code>. Если массив пуст, среднее даст NaN — поэтому деление имеет смысл только при непустом массиве.
+    </div>
+    <pre class="code">let arr = [10, 20, 30, 40, 50];
+let sum = 0;
+
+for (let i = 0; i < arr.length; i++) {
+  sum += arr[i];
+}
+
+let avg = sum / arr.length;
+console.log("Сумма:", sum);
+console.log("Среднее:", avg);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [10, 20, 30, 40, 50];</td><td class="line-desc">Создаём массив из пяти чисел. Это исходные данные задачи.</td></tr>
+        <tr><td class="line-code">let sum = 0;</td><td class="line-desc">Заводим переменную-накопитель. Ноль — «нейтральный» элемент для сложения: прибавление 0 не меняет результат, поэтому с него безопасно начинать.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length; i++) {</td><td class="line-desc">Цикл идёт по индексам от 0 до последнего. Условие <code>i &lt; arr.length</code> гарантирует, что мы не выйдем за границы массива.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;sum += arr[i];</td><td class="line-desc">Прибавляем текущий элемент к накопителю. Запись <code>sum += x</code> — то же самое, что <code>sum = sum + x</code>.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец тела цикла. После него управление возвращается к шагу <code>i++</code>, и начинается следующая итерация.</td></tr>
+        <tr><td class="line-code">let avg = sum / arr.length;</td><td class="line-desc">Среднее арифметическое — сумма делённая на количество элементов.</td></tr>
+        <tr><td class="line-code">console.log("Сумма:", sum);</td><td class="line-desc">Выводим сумму в консоль.</td></tr>
+        <tr><td class="line-code">console.log("Среднее:", avg);</td><td class="line-desc">Выводим среднее арифметическое в консоль.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex1-n" value="5" min="1" max="15"></div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 2 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 2</span><h3>Поиск максимума и минимума</h3></div>
+    <div class="task-text">
+      Найти наибольший и наименьший элемент массива без использования Math.max/Math.min.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> за максимум принимаем первый элемент, затем сравниваем с каждым следующим. Если встретился больший — обновляем. То же для минимума. Такой приём называется «поиск экстремума» и работает за один проход массива.
+    </div>
+    <pre class="code">let arr = [12, 45, 3, 78, 24, 9];
+let max = arr[0];
+let min = arr[0];
+
+for (let i = 1; i < arr.length; i++) {
+  if (arr[i] > max) max = arr[i];
+  if (arr[i] < min) min = arr[i];
+}
+
+console.log("Максимум:", max);
+console.log("Минимум:", min);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [12, 45, 3, 78, 24, 9];</td><td class="line-desc">Создаём массив чисел.</td></tr>
+        <tr><td class="line-code">let max = arr[0];</td><td class="line-desc">Берём первый элемент как стартовый «лучший кандидат» на максимум. Именно поэтому сравнение ищется не с нуля, а с элемента под индексом 1 — первый уже «зарезервирован».</td></tr>
+        <tr><td class="line-code">let min = arr[0];</td><td class="line-desc">То же для минимума: пока считаем, что первый элемент — наименьший.</td></tr>
+        <tr><td class="line-code">for (let i = 1; i &lt; arr.length; i++) {</td><td class="line-desc">Цикл начинаем с индекса 1, потому что элемент под индексом 0 мы уже учли. Это экономит одну «бессмысленную» итерацию сравнения элемента с самим собой.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (arr[i] &gt; max) max = arr[i];</td><td class="line-desc">Если текущий элемент больше найденного максимума — он становится новым максимумом.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (arr[i] &lt; min) min = arr[i];</td><td class="line-desc">Если текущий элемент меньше найденного минимума — он становится новым минимумом. Обе проверки выполняются независимо на каждой итерации.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец цикла. После полного прохода в max и min — экстремумы всего массива.</td></tr>
+        <tr><td class="line-code">console.log("Максимум:", max);</td><td class="line-desc">Выводим максимум.</td></tr>
+        <tr><td class="line-code">console.log("Минимум:", min);</td><td class="line-desc">Выводим минимум.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex2-n" value="6" min="1" max="15"></div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 3 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 3</span><h3>Подсчёт чётных и нечётных</h3></div>
+    <div class="task-text">
+      Определить, сколько в массиве чётных и нечётных элементов.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> два счётчика. Каждый элемент проверяем через остаток от деления на 2: <code>arr[i] % 2 === 0</code> — чётное. Это пример фильтрации признака по всему массиву.
+    </div>
+    <pre class="code">let arr = [3, 8, 1, 14, 7, 22];
+let even = 0;
+let odd = 0;
+
+for (let i = 0; i < arr.length; i++) {
+  if (arr[i] % 2 === 0) {
+    even++;
+  } else {
+    odd++;
+  }
+}
+
+console.log("Чётных:", even);
+console.log("Нечётных:", odd);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [3, 8, 1, 14, 7, 22];</td><td class="line-desc">Создаём массив чисел.</td></tr>
+        <tr><td class="line-code">let even = 0;</td><td class="line-desc">Счётчик чётных элементов. Начинает с нуля, в цикле будет увеличиваться.</td></tr>
+        <tr><td class="line-code">let odd = 0;</td><td class="line-desc">Счётчик нечётных элементов.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length; i++) {</td><td class="line-desc">Перебираем все индексы массива.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (arr[i] % 2 === 0) {</td><td class="line-desc">Вычисляем остаток от деления на 2. Если остаток 0 — число делится на 2 нацело, то есть чётное.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;even++;</td><td class="line-desc">Если чётное — увеличиваем счётчик чётных на 1. Запись <code>even++</code> — то же, что <code>even = even + 1</code>.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;} else {</td><td class="line-desc">Если остаток не 0 — число нечётное.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;odd++;</td><td class="line-desc">Увеличиваем счётчик нечётных на 1.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец условия.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец цикла. Каждый элемент попадает ровно в один из счётчиков.</td></tr>
+        <tr><td class="line-code">console.log("Чётных:", even);</td><td class="line-desc">Выводим количество чётных.</td></tr>
+        <tr><td class="line-code">console.log("Нечётных:", odd);</td><td class="line-desc">Выводим количество нечётных.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex3-n" value="6" min="1" max="15"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 4 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 4</span><h3>Поиск первого вхождения</h3></div>
+    <div class="task-text">
+      Найти индекс первого элемента, равного заданному значению. Если элемента нет — вернуть -1.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> стартовое значение -1 означает «не найдено». Идём по массиву; при совпадении запоминаем индекс и прерываем цикл оператором <code>break</code>, чтобы найти именно первое вхождение.
+    </div>
+    <pre class="code">let arr = [4, 7, 2, 9, 7, 1];
+let target = 7;
+let found = -1;
+
+for (let i = 0; i < arr.length; i++) {
+  if (arr[i] === target) {
+    found = i;
+    break;
+  }
+}
+
+console.log("Индекс элемента:", found);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [4, 7, 2, 9, 7, 1];</td><td class="line-desc">Создаём массив. Заметьте: значение 7 встречается дважды — на индексах 1 и 4.</td></tr>
+        <tr><td class="line-code">let target = 7;</td><td class="line-desc">Значение, которое мы ищем.</td></tr>
+        <tr><td class="line-code">let found = -1;</td><td class="line-desc"><code>-1</code> — «пустое» значение индекса. Оно означает «ещё не нашли». Такой приём удобен тем, что <code>-1</code> не может быть настоящим индексом массива и легко проверяется.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length; i++) {</td><td class="line-desc">Проходим по всем индексам массива.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (arr[i] === target) {</td><td class="line-desc">Строгое сравнение текущего элемента с искомым. <code>===</code> важно: неявное приведение типов здесь не нужно.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;found = i;</td><td class="line-desc">Запоминаем индекс найденного элемента.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;break;</td><td class="line-desc">Прерываем цикл. <code>break</code> гарантирует, что мы найдём именно <strong>первое</strong> вхождение — после него цикл не продолжается, даже если дальше есть ещё такие же значения.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец условия.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец цикла.</td></tr>
+        <tr><td class="line-code">console.log("Индекс элемента:", found);</td><td class="line-desc">Выводим результат. Если было <code>-1</code> — значит, значение в массиве не встречается.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex4-n" value="6" min="1" max="15"></div>
+      <div class="field"><label>Искомое</label><input type="number" id="ex4-target" value="7"></div>
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 5 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 5</span><h3>Разворот массива</h3></div>
+    <div class="task-text">
+      Развернуть массив в обратном порядке без использования встроенного reverse().
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> меняем местами первый элемент с последним, второй с предпоследним и так до середины. Обратите внимание: цикл идёт только до <code>arr.length / 2</code>, иначе элементы поменяются обратно.
+    </div>
+    <pre class="code">let arr = [5, 3, 8, 1, 9];
+
+for (let i = 0; i < arr.length / 2; i++) {
+  let temp = arr[i];
+  arr[i] = arr[arr.length - 1 - i];
+  arr[arr.length - 1 - i] = temp;
+}
+
+console.log(arr);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [5, 3, 8, 1, 9];</td><td class="line-desc">Создаём массив из пяти элементов.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length / 2; i++) {</td><td class="line-desc">Цикл идёт только до середины массива (<code>5 / 2 = 2.5</code> → итерации i = 0, 1, 2). Если бы цикл прошёл весь массив, элементы поменялись бы местами дважды и вернулись бы в исходное положение.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;let temp = arr[i];</td><td class="line-desc">Сохраняем текущий элемент во временную переменную. Без неё мы бы потеряли значение при перезаписи — это «кладовая» для обмена.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;arr[i] = arr[arr.length - 1 - i];</td><td class="line-desc">На место «левого» элемента записываем «правый». Индекс правого вычисляется как <code>length - 1 - i</code>: для i=0 это 4 (последний), для i=1 — 3 (предпоследний) и так далее.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;arr[arr.length - 1 - i] = temp;</td><td class="line-desc">На место «правого» элемента записываем сохранённый «левый». После этого шага пара элементов обменялась позициями.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец цикла. К середине все пары «конец–начало» уже обменялись.</td></tr>
+        <tr><td class="line-code">console.log(arr);</td><td class="line-desc">Выводим развёрнутый массив: [9, 1, 8, 3, 5].</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex5()">Проверить</button>
+    </div>
+    <div id="ex5-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 6 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 6</span><h3>Сортировка пузырьком</h3></div>
+    <div class="task-text">
+      Отсортировать массив по возрастанию методом пузырька (bubble sort). Это базовая учебная сортировка: соседние элементы сравниваются попарно и обмениваются местами, если стоят в неправильном порядке.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> внешний цикл повторяет проходы, внутренний — сравнивает пары <code>arr[j]</code> и <code>arr[j+1]</code>. За каждый проход наибольший элемент «всплывает» в конец, поэтому внутренний цикл каждый раз становится короче на 1 (условие <code>arr.length - 1 - i</code>). Обмен выполняется через временную переменную <code>temp</code>.
+    </div>
+    <pre class="code">let arr = [64, 34, 25, 12, 22];
+let sorted = arr.slice();
+
+for (let i = 0; i < sorted.length - 1; i++) {
+  for (let j = 0; j < sorted.length - 1 - i; j++) {
+    if (sorted[j] > sorted[j + 1]) {
+      let temp = sorted[j];
+      sorted[j] = sorted[j + 1];
+      sorted[j + 1] = temp;
+    }
+  }
+}
+
+console.log(sorted);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [64, 34, 25, 12, 22];</td><td class="line-desc">Исходный массив. Для наглядности сортируем копию, чтобы исходный не изменился.</td></tr>
+        <tr><td class="line-code">let sorted = arr.slice();</td><td class="line-desc"><code>slice()</code> без аргументов создаёт копию массива. Если бы мы написали <code>let sorted = arr</code>, обе переменные ссылались бы на один массив, и сортировка изменила бы исходный.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; sorted.length - 1; i++) {</td><td class="line-desc">Внешний цикл — количество «проходов». После каждого прохода самый большой элемент «всплывает» в конец, поэтому достаточно <code>length - 1</code> проходов.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;for (let j = 0; j &lt; sorted.length - 1 - i; j++) {</td><td class="line-desc">Внутренний цикл — сравнение соседних пар. Граница <code>length - 1 - i</code> становится короче с каждым проходом, ведь «всплывшие» элементы в конце уже отсортированы и трогать их не нужно.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;if (sorted[j] &gt; sorted[j + 1]) {</td><td class="line-desc">Если левый сосед больше правого — порядок нарушен.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let temp = sorted[j];</td><td class="line-desc">Сохраняем левый элемент. Обмен двух элементов всегда требует временную переменную.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sorted[j] = sorted[j + 1];</td><td class="line-desc">Записываем правый элемент на место левого.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sorted[j + 1] = temp;</td><td class="line-desc">Записываем сохранённый левый на место правого. Пара теперь в правильном порядке.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="line-desc">Конец условия обмена.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец внутреннего цикла — один полный проход завершён.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец внешнего цикла — все проходы завершены, массив отсортирован.</td></tr>
+        <tr><td class="line-code">console.log(sorted);</td><td class="line-desc">Выводим отсортированный массив по возрастанию.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex6-n" value="6" min="1" max="15"></div>
+      <button class="btn" onclick="ex6()">Проверить</button>
+    </div>
+    <div id="ex6-trace" class="trace"></div>
+    <div class="kb-note">
+      <div class="kb-bar">Кибербезопасность</div>
+      <div class="kb-body">Сортировка применяется в ИБ для упорядочивания логов по времени, сравнения хеш-таблиц и выявления аномалий. Простая пузырьковая сортировка на больших данных слишком медленная — на практике алгоритмы быстрее (быстрая, сортировка слиянием), но принцип обмена местами сохраняется.</div>
+    </div>
+  </div>
+
+  <!-- Задача 7 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 7</span><h3>Сдвиг массива влево</h3></div>
+    <div class="task-text">
+      Сдвинуть элементы массива влево на указанное количество позиций: первые элементы переходят в конец.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> за один шаг сохраняем первый элемент во временную переменную, сдвигаем всё на одну позицию влево, записываем сохранённый элемент в конец. Повторяем нужное число раз. Если <code>k</code> больше длины — берём <code>k % length</code> (лишние полные обороты ничего не меняют).
+    </div>
+    <pre class="code">let arr = [5, 9, 3, 7, 1];
+let k = 2;
+
+for (let s = 0; s < k % arr.length; s++) {
+  let first = arr[0];
+  for (let i = 0; i < arr.length - 1; i++) {
+    arr[i] = arr[i + 1];
+  }
+  arr[arr.length - 1] = first;
+}
+
+console.log(arr);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [5, 9, 3, 7, 1];</td><td class="line-desc">Исходный массив.</td></tr>
+        <tr><td class="line-code">let k = 2;</td><td class="line-desc">На сколько позиций сдвигаем влево.</td></tr>
+        <tr><td class="line-code">for (let s = 0; s &lt; k % arr.length; s++) {</td><td class="line-desc">Повторяем сдвиг на 1 позицию нужное число раз. <code>k % arr.length</code> отбрасывает лишние полные обороты: сдвиг на 5 для массива из 5 элементов это то же, что сдвиг на 0 — массив вернулся бы в исходное состояние.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;let first = arr[0];</td><td class="line-desc">Запоминаем первый элемент — он должен уйти в конец. Без сохранения мы бы его потеряли при сдвиге.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;for (let i = 0; i &lt; arr.length - 1; i++) {</td><td class="line-desc">Внутренний цикл двигает каждый элемент на одну позицию влево. Доходим до <code>length - 1</code>, потому что последний элемент будет перезаписан из сохранённого first.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;arr[i] = arr[i + 1];</td><td class="line-desc">На позицию i записываем значение с позиции i+1. Так «кольцо» значений сдвигается влево.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец внутреннего цикла — все элементы сместились влево на 1.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;arr[arr.length - 1] = first;</td><td class="line-desc">Записываем сохранённый первый элемент в конец. Один шаг сдвига завершён.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец внешнего цикла — выполнено k шагов сдвига.</td></tr>
+        <tr><td class="line-code">console.log(arr);</td><td class="line-desc">Выводим результат: [3, 7, 1, 5, 9] (сдвиг на 2 позиции влево).</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Сдвиг</label><input type="number" id="ex7-k" value="2" min="0" max="10"></div>
+      <button class="btn" onclick="ex7()">Проверить</button>
+    </div>
+    <div id="ex7-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 8 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 8</span><h3>Фильтрация по условию</h3></div>
+    <div class="task-text">
+      Создать новый массив, в который попадут только элементы, большие заданного порога.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> заводим пустой массив <code>result</code>. В цикле проверяем каждый элемент: если он проходит условие — добавляем через <code>push()</code>. Исходный массив не изменяется.
+    </div>
+    <pre class="code">let arr = [12, 45, 3, 78, 24, 9];
+let threshold = 20;
+let result = [];
+
+for (let i = 0; i < arr.length; i++) {
+  if (arr[i] > threshold) {
+    result.push(arr[i]);
+  }
+}
+
+console.log(result);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [12, 45, 3, 78, 24, 9];</td><td class="line-desc">Исходный массив.</td></tr>
+        <tr><td class="line-code">let threshold = 20;</td><td class="line-desc">Порог: будем отбирать элементы больше этого числа.</td></tr>
+        <tr><td class="line-code">let result = [];</td><td class="line-desc">Новый пустой массив для результата. Обратите внимание: исходный массив останется нетронутым — фильтрация всегда строит новый массив.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length; i++) {</td><td class="line-desc">Перебираем все индексы исходного массива.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (arr[i] &gt; threshold) {</td><td class="line-desc">Проверяем, что текущий элемент больше порога — условие фильтрации.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;result.push(arr[i]);</td><td class="line-desc">Если условие верно — метод <code>push</code> добавляет элемент в конец результирующего массива.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец условия. Элементы, не прошедшие порог, просто пропускаются.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец цикла.</td></tr>
+        <tr><td class="line-code">console.log(result);</td><td class="line-desc">Выводим отфильтрованный массив: [45, 78, 24].</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex8-n" value="6" min="1" max="15"></div>
+      <div class="field"><label>Порог</label><input type="number" id="ex8-threshold" value="20"></div>
+      <button class="btn" onclick="ex8()">Проверить</button>
+    </div>
+    <div id="ex8-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 9 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 9</span><h3>Количество вхождений значения</h3></div>
+    <div class="task-text">
+      Посчитать, сколько раз заданное значение встречается в массиве.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> в отличие от поиска первого вхождения (задача 4), здесь нельзя останавливаться при первом совпадении. Счётчик увеличивается на каждой итерации, где элемент равен искомому. Обратите внимание: для случайного массива с диапазоном 1–6 значение 7 встретится 0 раз.
+    </div>
+    <pre class="code">let arr = [3, 7, 3, 9, 3, 1];
+let value = 3;
+let count = 0;
+
+for (let i = 0; i < arr.length; i++) {
+  if (arr[i] === value) {
+    count++;
+  }
+}
+
+console.log("Вхождений:", count);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [3, 7, 3, 9, 3, 1];</td><td class="line-desc">Исходный массив. Значение 3 встречается трижды.</td></tr>
+        <tr><td class="line-code">let value = 3;</td><td class="line-desc">Значение, вхождения которого считаем.</td></tr>
+        <tr><td class="line-code">let count = 0;</td><td class="line-desc">Счётчик вхождений.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length; i++) {</td><td class="line-desc">Перебираем все индексы массива.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (arr[i] === value) {</td><td class="line-desc">Строгое сравнение текущего элемента с искомым значением.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;count++;</td><td class="line-desc">При совпадении увеличиваем счётчик. В отличие от поиска первого вхождения, <strong>цикл здесь не прерывается</strong> — нужно посчитать все совпадения.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец условия.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец цикла — прошли весь массив.</td></tr>
+        <tr><td class="line-code">console.log("Вхождений:", count);</td><td class="line-desc">Выводим итоговое количество: 3.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Размер массива</label><input type="number" id="ex9-n" value="6" min="1" max="15"></div>
+      <div class="field"><label>Значение</label><input type="number" id="ex9-value" value="3"></div>
+      <button class="btn" onclick="ex9()">Проверить</button>
+    </div>
+    <div id="ex9-trace" class="trace"></div>
+  </div>
+
+  <!-- Задача 10 -->
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 10</span><h3>Сортировка выбором</h3></div>
+    <div class="task-text">
+      Отсортировать массив по возрастанию методом выбора (selection sort): находим минимальный элемент и ставим его на первое место, затем ищем минимальный среди оставшихся и ставим на второе и т.д.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> внешний цикл фиксирует позицию <code>i</code>, внутренний — ищет индекс минимального элемента в хвосте массива (от i до конца). Найденный минимум меняется местами с элементом на позиции <code>i</code>. С каждой итерацией «отсортированная» часть растёт, «неотсортированная» — уменьшается.
+    </div>
+    <pre class="code">let arr = [64, 34, 25, 12, 22];
+
+for (let i = 0; i < arr.length - 1; i++) {
+  let minIndex = i;
+
+  for (let j = i + 1; j < arr.length; j++) {
+    if (arr[j] < arr[minIndex]) {
+      minIndex = j;
+    }
+  }
+
+  if (minIndex !== i) {
+    let temp = arr[i];
+    arr[i] = arr[minIndex];
+    arr[minIndex] = temp;
+  }
+}
+
+console.log(arr);</pre>
+
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">let arr = [64, 34, 25, 12, 22];</td><td class="line-desc">Исходный массив.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; arr.length - 1; i++) {</td><td class="line-desc">Внешний цикл: позиция, которую надо «заполнить». Последний элемент заполнять не нужно — после всех шагов он сам окажется на месте.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;let minIndex = i;</td><td class="line-desc">Предполагаем, что на текущей позиции уже стоит минимальный элемент из оставшейся части. Запоминаем его индекс как <code>minIndex</code>.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;for (let j = i + 1; j &lt; arr.length; j++) {</td><td class="line-desc">Внутренний цикл ищет минимум в «хвосте» массива — от позиции i+1 до конца.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;if (arr[j] &lt; arr[minIndex]) {</td><td class="line-desc">Если нашли элемент меньше текущего минимума.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minIndex = j;</td><td class="line-desc">Обновляем индекс минимального элемента.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;}</td><td class="line-desc">Конец условия.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец внутреннего цикла — теперь <code>minIndex</code> указывает на самый маленький элемент хвоста.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;if (minIndex !== i) {</td><td class="line-desc">Если минимум уже стоит на своём месте — обмен не нужен. Проверка экономит лишнюю операцию.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;let temp = arr[i];</td><td class="line-desc">Начинаем обмен: сохраняем элемент с позиции i во временную переменную.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;arr[i] = arr[minIndex];</td><td class="line-desc">Ставим минимум на позицию i — теперь слева отсортированная часть растёт.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;&nbsp;&nbsp;arr[minIndex] = temp;</td><td class="line-desc">Ставим сохранённый элемент на освободившееся место.</td></tr>
+        <tr><td class="line-code">&nbsp;&nbsp;}</td><td class="line-desc">Конец условия обмена.</td></tr>
+        <tr><td class="line-code">}</td><td class="line-desc">Конец внешнего цикла — массив отсортирован по возрастанию.</td></tr>
+        <tr><td class="line-code">console.log(arr);</td><td class="line-desc">Выводим результат: [12, 22, 25, 34, 64].</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex10()">Проверить</button>
+    </div>
+    <div id="ex10-trace" class="trace"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ЗАДАЧИ ДЛЯ САМОСТОЯТЕЛЬНОЙ РАБОТЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    6 задач по мотивам разобранных примеров. Они намеренно проще — решаются тем же приёмом, что и примеры выше.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Произведение элементов</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив чисел. Вычислить произведение всех его элементов. Приём — как в Задаче 1 (сумма), но вместо сложения умножение, а начальное значение не 0, а 1.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Второй по величине</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив чисел. Найти второй по величине элемент. Подсказка: сначала найдите максимум (Задача 2), затем ищите максимум среди элементов, меньших него.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Чётные в новый массив</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив. Создать новый массив только из чётных элементов. Приём — как в Задаче 8 (фильтрация), условие чётности — как в Задаче 3.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Первый и последний</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Дан массив. Вывести в консоль первый и последний элемент. Напомним: последний — это <code>arr[length - 1]</code>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Сумма чётных позиций</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Дан массив. Посчитать сумму элементов, стоящих на чётных индексах (0, 2, 4...). Внутри цикла проверяйте <code>i % 2 === 0</code>, а не значение элемента.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Сортировка по убыванию</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Возьмите код сортировки «пузырьком» (Задача 6) или «выбором» (Задача 10) и измените условие сравнения, чтобы массив сортировался по убыванию. Сравните разницу: достаточно поменять знак <code>&gt;</code> на <code>&lt;</code> в одном месте.</div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ВОПРОСЫ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">Ответьте письменно или устно, сверившись с разобранными задачами.</p>
+
+  <div class="tasks-list">
+    <div class="task"><div class="task-head"><span class="num">1</span><h3>Почему при поиске максимума начальное значение берут из первого элемента, а не из 0?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">2</span><h3>Зачем в сортировке «пузырьком» внутренний цикл уменьшается на i?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">3</span><h3>Почему в развороте массива цикл идёт только до середины? Что будет, если пройти весь массив?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">4</span><h3>В чём отличие поиска первого вхождения от подсчёта всех вхождений?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">5</span><h3>Какой временной переменной обменивают два соседних элемента при сортировке? Нарисуйте последовательность шагов для пары (5, 3).</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">6</span><h3>Зачем при сдвиге массива использовать k % length?</h3></div></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ИСТОЧНИКИ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Источники</span><h3>Где читать и изучать тему</h3></div>
+    <div class="sources-list">
+      <a href="https://learn.javascript.ru/array" target="_blank"><span class="src-name">learn.javascript.ru — Массивы</span><span class="src-desc">Основы: создание, доступ, перебор.</span></a>
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank"><span class="src-name">MDN — Array</span><span class="src-desc">Полный справочник методов массивов.</span></a>
+      <a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D0%BF%D1%83%D0%B7%D1%8B%D1%80%D1%8C%D0%BA%D0%BE%D0%BC" target="_blank"><span class="src-name">Википедия — сортировка пузырьком</span><span class="src-desc">Теория алгоритма, оценка сложности O(n²).</span></a>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code><br>
+      <strong>2.</strong> Скопируйте код готового решения из блока-окна и вставьте в файл <code>task.js</code><br>
+      <strong>3.</strong> Запустите: <code>node task.js</code><br>
+      <strong>4.</strong> Результат (значение <code>console.log</code>) появится в терминале<br><br>
+      Готовые решения всех 10 задач содержат вызов <code>console.log()</code> — их можно запускать как есть.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="arrays-tasks.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Циклы — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Циклы</h1>
+      <div class="subtitle">Модуль 1. Введение в JavaScript</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#theory">Теория</a>
+    <a href="#examples">Примеры</a>
+    <a href="#tasks">Задачи</a>
+    <a href="#quiz">Вопросы</a>
+    <a href="#sources">Источники</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="theory"><div class="bar"></div><h2>Теория</h2></div>
+
+  <details class="theory" open>
+    <summary>Что такое цикл <span class="src">learn.javascript.ru/while-for</span></summary>
+    <div class="theory-body">
+      <p>В программировании часто требуется повторить одно и то же действие несколько раз. Программные механизмы, позволяющие несколько раз выполнить один и тот же блок кода, называют <strong>циклами</strong>.</p>
+      <p>Повторяемый блок кода называется <strong>телом цикла</strong> (loop body), а процесс его выполнения — <strong>итерацией</strong> (iteration). Фраза «на второй итерации» означает «при втором повторе тела цикла».</p>
+      <p>Повтор происходит в зависимости от некоторого выражения — <strong>циклового условия</strong> (loop condition). Если условие истинно — цикл повторяется; если ложно — прекращается.</p>
+      <p>Если циклового условия нет — повторения не прекращаются, получается <strong>бесконечный цикл</strong>. Он выполняется в течение всей работы сценария и прерывается только после его завершения. Бесконечные циклы применяются для постоянного мониторинга параметров (например, сетевой активности), поддержания анимации или пользовательского ввода в играх. С негативной стороны — бесконечный цикл в результате ошибки программиста приводит к «зависанию» сценария.</p>
+      <p>Если в цикле необходим подсчёт номера итерации, вводится отдельная переменная — <strong>цикловая переменная</strong> (счётчик). Она принимает значение, равное номеру повтора, и изменяется с каждым шагом. Величина, на которую изменяется цикловая переменная, называется <strong>шагом</strong> (step).</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Классификация циклов <span class="src">виды и выбор</span></summary>
+    <div class="theory-body">
+      <p>По способу организации повторного выполнения кода циклы делят на:</p>
+      <ul>
+        <li><strong>Циклы-счётчики</strong> — выполняются заданное количество раз. Количество повторов известно <strong>до начала</strong> цикла.</li>
+        <li><strong>Условные циклы</strong> — выполняются, пока некоторое условие истинно. Количество повторов заранее неизвестно.</li>
+      </ul>
+      <p>Условные циклы, в свою очередь, делятся на:</p>
+      <ul>
+        <li><strong>Циклы с предусловием</strong> — условие проверяется <strong>до</strong> выполнения тела. Могут не выполниться ни разу, если условие изначально ложно.</li>
+        <li><strong>Циклы с постусловием</strong> — условие проверяется <strong>после</strong> выполнения тела. Выполняются, по крайней мере, один раз.</li>
+      </ul>
+      <table class="theory-table">
+        <tr><th>Тип</th><th>Оператор</th><th>Когда условие</th><th>Минимум итераций</th></tr>
+        <tr><td>Счётчик</td><td><code>for</code></td><td>перед телом</td><td>0</td></tr>
+        <tr><td>Условный + предусловие</td><td><code>while</code></td><td>перед телом</td><td>0</td></tr>
+        <tr><td>Условный + постусловие</td><td><code>do…while</code></td><td>после тела</td><td>1</td></tr>
+      </table>
+      <p><strong>Как выбрать:</strong></p>
+      <ul>
+        <li>Знаете заранее число повторов → <code>for</code></li>
+        <li>Число повторов неизвестно, но может быть 0 → <code>while</code></li>
+        <li>Действие нужно выполнить хотя бы один раз, а потом повторять → <code>do…while</code></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Цикл while (предусловие) <span class="src">learn.javascript.ru/while-for</span></summary>
+    <div class="theory-body">
+      <p>Цикл с предусловием создаётся оператором <code class="inline">while</code>. Общий синтаксис:</p>
+      <pre class="code">while (condition) {
+  // тело цикла
+}</pre>
+      <p>Цикл обеспечивает повторное выполнение тела, пока условие остаётся истинным. Перед каждой итерацией условие проверяется заново.</p>
+      <p>Для того чтобы цикл имел окончание, в теле цикла должны быть инструкции, влияющие на условие повторения. Иначе — бесконечный цикл. Это одна из самых популярных ошибок даже у опытных программистов: забыть включить в тело инструкции по управлению условием.</p>
+
+      <h4>Правильный вариант — цикл завершится</h4>
+      <pre class="code">let i = 1;
+while (i < 10) {
+  console.log(i);
+  i++;          // увеличиваем i — условие когда-нибудь станет ложным
+}
+// Вывод: 1 2 3 4 5 6 7 8 9</pre>
+
+      <h4>Неправильный вариант — бесконечный цикл</h4>
+      <pre class="code">let i = 1;
+while (i < 10) {
+  console.log(i);
+  // i++ забыли! i всегда равно 1, условие всегда true
+}
+// Зависание: вкладка перестанет отвечать</pre>
+
+      <p>В первом случае переменная <code class="inline">i</code> увеличивается на каждой итерации и рано или поздно перестаёт удовлетворять условию <code class="inline">i &lt; 10</code>. Во втором случае <code class="inline">i</code> навсегда остаётся равной 1 — условие всегда истинно, и цикл выполняется бесконечно. Это не синтаксическая ошибка: такой код скомпилируется и запустится, но программа «зависнет».</p>
+      <p><strong>Когда применять while:</strong></p>
+      <ul>
+        <li>заранее неизвестно количество повторов тела цикла</li>
+        <li>условие окончания не зависит напрямую от цикловой переменной</li>
+        <li>цикл зависит от входящих данных, например от действия пользователя</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Цикл do…while (постусловие) <span class="src">learn.javascript.ru/while-for</span></summary>
+    <div class="theory-body">
+      <p>Цикл с постусловием создаётся оператором <code class="inline">do…while</code>:</p>
+      <pre class="code">do {
+  // тело цикла
+} while (condition);</pre>
+      <p>В отличие от <code class="inline">while</code>, условие проверяется <strong>после</strong> выполнения тела. Поэтому цикл с постусловием выполнится <strong>как минимум один раз</strong>, даже если условие изначально ложно.</p>
+      <p>Циклы с постусловием удобно применять, когда тело должно быть выполнено хотя бы один раз — например, запрос ввода у пользователя до получения корректного значения.</p>
+      <pre class="code">let answer;
+do {
+  answer = prompt("Введите yes или no");
+} while (answer !== "yes" && answer !== "no");</pre>
+      <p>Другой пример — получение двух случайных чисел, не равных между собой. Второе число нужно рассчитать как минимум один раз, а при совпадении с первым — рассчитывать повторно:</p>
+      <pre class="code">let x1 = Math.random();
+let x2;
+do {
+  x2 = Math.random();
+} while (x2 === x1);</pre>
+
+      <h4>Ошибка бесконечного цикла в do…while</h4>
+      <p>Как и в <code class="inline">while</code>, в теле <code class="inline">do…while</code> должно что-то меняться, чтобы условие когда-нибудь стало ложным. Сравните:</p>
+
+      <pre class="code">// Верно: переменная меняется, цикл завершится
+let n = 100;
+do {
+  console.log(n);
+  n = Math.floor(n / 2);   // n уменьшается
+} while (n > 0);
+// Вывод: 100 50 25 12 6 3 1</pre>
+
+      <pre class="code">// Неверно: n не меняется — бесконечный цикл
+let n = 100;
+do {
+  console.log(n);
+  // нет инструкции, меняющей n!
+} while (n > 0);
+// Зависание</pre>
+      <p>Разница в одной строке: если в теле цикла нет инструкции, влияющей на условие, цикл никогда не завершится. В <code class="inline">do…while</code> это особенно коварно, потому что хотя бы одна итерация всегда выполняется, и ошибка проявляется не сразу.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>Цикл for (счётчик) <span class="src">learn.javascript.ru/while-for</span></summary>
+    <div class="theory-body">
+      <p>Цикл-счётчик организуется оператором <code class="inline">for</code>. Синтаксис содержит три блока:</p>
+      <pre class="code">for (initialization; condition; expression) {
+  // тело цикла
+}</pre>
+      <ul>
+        <li><strong>initialization</strong> — инициализация цикловой переменной. Выполняется один раз перед началом цикла.</li>
+        <li><strong>condition</strong> — условие, при котором цикл продолжается. Проверяется перед каждой итерацией.</li>
+        <li><strong>expression</strong> — изменение цикловой переменной. Выполняется после каждой итерации.</li>
+      </ul>
+      <p>Типичная запись:</p>
+      <pre class="code">for (let i = 0; i < 5; i++) {
+  console.log(i);   // 0 1 2 3 4
+}</pre>
+      <p>Традиционно цикловую переменную называют <code class="inline">i</code> (от англ. iteration), но это необязательно — можно выбрать любое имя.</p>
+      <p>Порядок работы:</p>
+      <ul>
+        <li>1. Выполняется блок инициализации (один раз)</li>
+        <li>2. Проверяется условие. Если true — выполняется тело</li>
+        <li>3. Выполняется блок изменения переменной</li>
+        <li>4. Снова проверяется условие…</li>
+      </ul>
+      <p><code class="inline">for</code> — это разновидность цикла с предусловием: если условие изначально ложно (например, <code class="inline">i &lt; 0</code>), тело не выполнится ни разу.</p>
+      <p>Все три блока могут быть пустыми (но не разделители «;»). Например, если переменная инициализирована до цикла:</p>
+      <pre class="code">let i = 0;
+for (; i < 5; i++) {
+  console.log(i);
+}</pre>
+      <p>Блоки могут содержать несколько операций через запятую:</p>
+      <pre class="code">for (let i = 0, j = 10; i !== j; i++, j--) {
+  console.log(i, j);
+}</pre>
+      <p>Им можно заменить любой условный цикл, но лучше использовать <code class="inline">for</code> по назначению — для циклов-счётчиков с известным числом повторов. Это вопрос читаемости кода.</p>
+
+      <h4>Типичная ошибка: забытый шаг</h4>
+      <p>Как и в <code class="inline">while</code>, в <code class="inline">for</code> можно забыть изменить цикловую переменную — если убрать третий блок или не менять переменную в теле:</p>
+
+      <pre class="code">// Верно: третий блок есть — цикл завершится
+for (let i = 0; i < 5; i++) {
+  console.log(i);
+}
+
+// Неверно: третий блок пуст, i не меняется — бесконечный цикл
+for (let i = 0; i < 5; ) {
+  console.log(i);
+  // i++ нет!
+}</pre>
+      <p>Однако, если i++ перенесён в тело, цикл всё равно работает — лишь бы переменная менялась. Главное правило: что-то в цикле должно гарантированно приближать условие к ложному.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>for…in и for…of <span class="src">learn.javascript.ru/for-in</span></summary>
+    <div class="theory-body">
+      <p>Для перебора содержимого массивов и коллекций предназначены сокращённые формы оператора <code class="inline">for</code>:</p>
+      <pre class="code">for (variable in object)   // перебор индексов (ключей)
+for (variable of object)   // перебор значений</pre>
+      <p><code class="inline">for…in</code> перебирает ключи (индексы) объекта, <code class="inline">for…of</code> — значения. Проще всего пояснить разницу на примере:</p>
+      <pre class="code">let arr = [5, 4, 3, 2, 1];
+
+for (let i in arr) console.log(i);      // 0 1 2 3 4 (индексы)
+for (let v of arr) console.log(v);      // 5 4 3 2 1 (значения)</pre>
+      <p>Детальнее массивы и объекты изучаются в следующих темах, но знать о существовании этих циклов важно уже сейчас.</p>
+    </div>
+  </details>
+
+  <details class="theory">
+    <summary>break, continue, метки <span class="src">learn.javascript.ru/while-for</span></summary>
+    <div class="theory-body">
+      <p>Для дополнительного управления выполнением цикла предназначены операторы <code class="inline">break</code> и <code class="inline">continue</code>. Они применимы во всех циклах.</p>
+      <h4>break — полная остановка</h4>
+      <p><code class="inline">break</code> полностью останавливает выполнение цикла, независимо от состояния условия. Применяется при появлении недопустимого значения или условия, не позволяющего продолжать:</p>
+      <pre class="code">for (let i = 0; i < 10; i++) {
+  let r = Math.round(Math.random() * 6) + 1;
+  if (r === 4) break;     // выпала четвёрка — стоп
+  console.log(r);
+}</pre>
+      <h4>continue — остановка итерации</h4>
+      <p><code class="inline">continue</code> останавливает выполнение текущей итерации и переходит к следующей (если условие позволяет). Полезно для пропуска нежелательных данных:</p>
+      <pre class="code">for (let i = 0; i < 10; i++) {
+  if (i % 2 === 0) continue;   // пропускаем чётные
+  console.log(i);              // 1 3 5 7 9
+}</pre>
+      <h4>Метки (labels)</h4>
+      <p>Вложенные циклы можно прерывать целиком с помощью меток. Метка — идентификатор с двоеточием перед циклом:</p>
+      <pre class="code">outer: for (let i = 0; i < 5; i++) {
+  for (let j = 0; j < 5; j++) {
+    console.log(i, j);
+    if (j === 3) break outer;   // прерываем внешний цикл
+  }
+}</pre>
+      <p>Метки можно использовать и с <code class="inline">continue</code>.</p>
+    </div>
+  </details>
+
+  
+  
+  
+
+  <div class="section-title" id="examples"><div class="bar"></div><h2>Примеры с пошаговым разбором</h2></div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 1</span>
+      <h3>Кредитный калькулятор (while)</h3>
+    </div>
+    <div class="task-text">
+      Пользователь берёт кредит: сумма, ежемесячная ставка и платёж. Определить, за сколько месяцев долг будет погашен. Количество повторов заранее неизвестно — используем <code>while</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> мы оказались в ситуации, когда число повторов заранее неизвестно — оно зависит от суммы кредита, ставки и платежа. Поэтому цикл-счётчик (<code class="inline">for</code>) не подходит, нужен условный цикл <code class="inline">while</code>.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Условие:</strong> <code class="inline">amount &gt; 0</code> — пока есть непогашенный долг, цикл продолжается. Как только долг становится нулевым или отрицательным — условие ложно, цикл прекращается.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Тело цикла:</strong> на каждой итерации (каждом месяце) долг сначала растёт на процентную ставку (<code class="inline">amount += amount * rate / 100</code>), затем уменьшается на платеж (<code class="inline">amount -= payment</code>). Счётчик <code class="inline">months++</code> отслеживает число итераций — это гарантирует, что переменная меняется, и цикл не станет бесконечным.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Если платеж меньше начисленных процентов:</strong> долг будет расти каждый месяц, условие <code class="inline">amount &gt; 0</code> всегда истинно — цикл станет бесконечным. Это пример осмысленной ошибки в данных, а не в коде.
+    </div>
+    <pre class="code">function creditMonths(amount, rate, payment) {
+  let months = 0;
+  while (amount > 0) {
+    amount += amount * rate / 100;
+    amount -= payment;
+    months++;
+  }
+  return months;
+}</pre>
+    <div class="controls">
+      <div class="field"><label>Сумма кредита</label><input type="number" id="ex1-amount" value="1000"></div>
+      <div class="field"><label>Ставка, %</label><input type="number" id="ex1-rate" value="10"></div>
+      <div class="field"><label>Платёж</label><input type="number" id="ex1-payment" value="300"></div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 2</span>
+      <h3>Два разных случайных числа (do…while)</h3>
+    </div>
+    <div class="task-text">
+      Получить два случайных числа в заданном диапазоне, не равных между собой. Второе число нужно рассчитать как минимум один раз — используем <code>do…while</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> мы не знаем заранее, с какой попытки выпадут два разных числа. Это может случиться с первой же итерации, а может потребовать десятка повторов. Поэтому количество итераций неизвестно — используем условный цикл.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Почему do…while, а не while:</strong> второе число нужно получить <strong>как минимум один раз</strong> — нельзя сравнивать то, чего нет. <code class="inline">do…while</code> сначала генерирует число, а потом проверяет, не совпало ли оно с первым. <code class="inline">while</code> тоже подошёл бы, но потребовал бы дублирования кода генерации до цикла.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Условие:</strong> <code class="inline">x2 === x1</code> — если числа равны, повторяем генерацию. Как только числа оказываются разными — цикл прекращается. Обратите внимание: условие сформулировано «повторять, пока равны», а не «пока не равны». Это типичная логика для постусловия.
+    </div>
+    <pre class="code">function randomPair(a, b) {
+  let x1 = Math.floor(Math.random() * (b - a + 1)) + a;
+  let x2;
+  do {
+    x2 = Math.floor(Math.random() * (b - a + 1)) + a;
+  } while (x2 === x1);
+  return [x1, x2];
+}</pre>
+    <div class="controls">
+      <div class="field"><label>От</label><input type="number" id="ex2-a" value="1"></div>
+      <div class="field"><label>До</label><input type="number" id="ex2-b" value="6"></div>
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 3</span>
+      <h3>Таблица умножения (for)</h3>
+    </div>
+    <div class="task-text">
+      Вывести таблицу умножения для заданного числа от 1 до 10. Число повторов известно заранее (10) — используем <code>for</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> число повторов известно заранее — ровно 10 строк таблицы. Это классический случай для цикла-счётчика <code class="inline">for</code>.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Три блока цикла:</strong> инициализация <code class="inline">let i = 1</code> выполняется один раз перед началом; условие <code class="inline">i &lt;= 10</code> проверяется перед каждой итерацией; шаг <code class="inline">i++</code> выполняется после тела. Условие использует нестрогое сравнение <code class="inline">&lt;=</code>, потому что число 10 само должно попасть в таблицу.
+    </div>
+<div class="task-text" style="margin-top:4px;">
+      <strong>Условие задачи:</strong> нам нужно <strong>ровно 10</strong> чисел, но числа, кратные 4, мы пропускаем. Сколько всего итераций потребуется — неизвестно (зависит от случайности), поэтому <code class="inline">for</code> с фиксированным числом повторов не подходит — используем <code class="inline">while</code>.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Условие цикла:</strong> <code class="inline">result.length &lt; 10</code> — продолжаем, пока в массиве не наберётся 10 подходящих чисел. Как только массив заполнен — условие ложно, цикл завершается.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Роль continue:</strong> когда случайное число делится на 4 (<code class="inline">r % 4 === 0</code>), срабатывает <code class="inline">continue</code> — оставшаяся часть тела (<code class="inline">result.push(r)</code>) пропускается, и цикл переходит к следующей итерации. Без <code class="inline">continue</code> пришлось бы оборачивать <code class="inline">push</code> в условие <code class="inline">if</code>, что менее наглядно.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Возможная ошибка:</strong> если <code class="inline">continue</code> стоит, но забыт <code class="inline">result.push</code> в ветке «не кратно 4» — массив никогда не заполнится, и цикл станет бесконечным. Всегда проверяйте, что условие выхода действительно достигается на каждой итерации.
+    </div>
+    <div class="task-text" style="margin-top:4px;">
+      <strong>Почему не while:</strong> можно было бы написать <code class="inline">let i = 1; while (i &lt;= 10) { …; i++; }</code>, но <code class="inline">for</code> собирает все три части управления циклом в одной строке — код читается лучше, и вероятность забыть <code class="inline">i++</code> (и получить бесконечный цикл) ниже.
+    </div>
+    <pre class="code">function multiplyTable(n) {
+  for (let i = 1; i <= 10; i++) {
+    console.log(n + ' × ' + i + ' = ' + (n * i));
+  }
+}</pre>
+    <div class="controls">
+      <div class="field"><label>Число</label><input type="number" id="ex3-n" value="7"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head">
+      <span class="num">Пример 4</span>
+      <h3>10 случайных чисел без кратных 4 (continue)</h3>
+    </div>
+    <div class="task-text">
+      Вывести ровно 10 случайных чисел из диапазона 1–20, кроме тех, которые делятся на 4. Используем <code>while</code> + <code>continue</code>.
+    </div>
+    <div class="task-text" style="margin-top:8px;">
+      <strong>Как это работает:</strong> количество итераций заранее неизвестно (случайные числа), поэтому берём условный цикл. При попадании числа, кратного 4, оператор <code>continue</code> прерывает текущую итерацию — число не попадает в результат, а цикл генерирует следующее.
+    </div>
+    <pre class="code">function randomNoMod4() {
+  let result = [];
+  while (result.length < 10) {
+    let r = Math.floor(Math.random() * 20) + 1;
+    if (r % 4 === 0) continue;
+    result.push(r);
+  }
+  return result;
+}</pre>
+    <div class="controls">
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="tasks"><div class="bar"></div><h2>Задачи для самостоятельной работы</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">
+    10 задач. Для каждой выберите подходящий цикл: <strong>while / do…while / for</strong>. Код задач в файл <code>script.js</code> не включён — пишите всё самостоятельно.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Сумма диапазона</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Подсчитать сумму всех чисел в заданном пользователем диапазоне (от A до B). <em>for</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Чётные числа от 2 до N</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить N и вывести все чётные числа от 2 до N (или N−1, если N нечётное). Ввод 10 → 2 4 6 8 10; ввод 7 → 2 4 6. <em>for</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Нечётные в порядке убывания</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить N и вывести нечётные числа от N (или N−1) до 1 в порядке убывания. Ввод 7 → 7 5 3 1; ввод 10 → 9 7 5 3 1. <em>for</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Делители числа</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить N и вывести все числа, на которые N делится без остатка, включая 1. Ввод 10 → 1 2 5; ввод 11 → 1. <em>for</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Возведение в степень</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить число и степень. Возвести число в степень и вывести результат. Степень — целое положительное. <em>while</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">6</span><h3>Факториал</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Посчитать факториал введённого пользователем числа. <em>while или for</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">7</span><h3>Статистика ввода</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить 10 чисел и подсчитать, сколько среди них положительных, отрицательных и нулей, а также чётных и нечётных. Вывести статистику. Достаточно одной переменной для ввода. <em>for</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">8</span><h3>Правильный ответ</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Предлагать пользователю решить пример 2 + 2 × 2 до тех пор, пока он не ответит правильно. <em>do…while</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">9</span><h3>Половина от 1000</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Делить число 1000 на 2 до тех пор, пока не получится число меньше 50. Вывести это число и сколько делений было произведено. <em>do…while</em>.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">10</span><h3>Игра «Угадай число»</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Предложите пользователю загадать число от 0 до 100 и отгадайте его: каждую итерацию делите диапазон пополам, записывайте результат в N и спрашивайте «Ваше число &gt; N, &lt; N или == N?». В зависимости от ответа уменьшайте диапазон, пока не будет == N. <em>while или do…while</em>.</div>
+      <div class="kb-note">
+        <div class="kb-bar">Кибербезопасность</div>
+        <div class="kb-body">Бинарный поиск — не только алгоритм из этой задачи. Он лежит в основе поиска по логам, анализа сигнатур и оптимизации перебора паролей при атаках. Понимание, как быстро «схлопывается» диапазон, помогает оценивать стойкость систем к перебору.</div>
+      </div>
+    </div>
+
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="quiz"><div class="bar"></div><h2>Вопросы для самопроверки</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:16px; font-size:14px;">Ответьте письменно или устно, сверившись с теорией выше.</p>
+
+  <div class="tasks-list">
+    <div class="task"><div class="task-head"><span class="num">1</span><h3>Чем цикл с предусловием отличается от цикла с постусловием? Сколько минимум итераций у каждого?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">2</span><h3>В каких случаях выбирают while, а в каких do…while?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">3</span><h3>Что произойдёт, если в теле while забыть инструкцию, влияющую на условие?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">4</span><h3>Назовите три блока цикла for и что делает каждый из них.</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">5</span><h3>Может ли цикл for выполниться 0 раз? При каком условии?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">6</span><h3>Чем for…in отличается от for…of?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">7</span><h3>В чём разница между break и continue?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">8</span><h3>Что такое метка и зачем она нужна во вложенных циклах?</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">9</span><h3>Можно ли заменить for на while? Приведите пример, когда это удобно, а когда — нет.</h3></div></div>
+    <div class="task"><div class="task-head"><span class="num">10</span><h3>Где в реальных системах встречаются бесконечные циклы и чем они опасны при ошибке?</h3></div></div>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="sources"><div class="bar"></div><h2>Источники</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Источники</span><h3>Где читать и изучать тему</h3></div>
+    <div class="sources-list">
+      <a href="https://learn.javascript.ru/while-for" target="_blank"><span class="src-name">learn.javascript.ru — Циклы while и for</span><span class="src-desc">Базовая теория: while, do…while, for, break, continue, метки.</span></a>
+      <a href="https://learn.javascript.ru/for-in" target="_blank"><span class="src-name">learn.javascript.ru — Цикл for…in</span><span class="src-desc">Перебор ключей объекта.</span></a>
+      <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Loops_and_iteration" target="_blank"><span class="src-name">MDN — Циклы и итерации</span><span class="src-desc">Официальная документация по всем видам циклов.</span></a>
+    </div>
+  </div>
+
+  
+  
+  
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>1.</strong> Откройте терминал в VS Code: <code>Ctrl + `</code><br>
+      <strong>2.</strong> Для проверки готовых примеров: <code>node cikly.js</code><br>
+      <strong>3.</strong> Для своих задач: создайте файл <code>task1.js</code>, напишите решение и запустите: <code>node task1.js</code><br><br>
+      Не забудьте: <code>prompt()</code> для ввода, <code>console.log()</code> для вывода.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="cikly.js"></script>
+<script>
+function getTheme() {
+  return localStorage.getItem('js-theme') || 'dark';
+}
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

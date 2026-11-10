@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Решение задач с классами — JS Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <a href="index.html" class="back">← Все темы</a>
+    <div>
+      <h1>Решение задач с классами</h1>
+      <div class="subtitle">Практическое занятие · 5 задач на урок + 5 на дом</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a href="#classwork">Классная работа</a>
+    <a href="#homework">Домашнее задание</a>
+    <a href="#terminal">Терминал</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- КЛАССНАЯ РАБОТА -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="classwork"><div class="bar"></div><h2>Классная работа</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">
+    Пять задач на разные предметные области: дроби, корзина покупок, шифр, транспорт, генератор паролей.
+    Каждая — с полным кодом (можно скопировать и запустить), построчным пояснением и интерактивной версией.
+    Ввод — через <code>prompt()</code>, вывод — в консоль через шаблонные строки.
+  </p>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 1</span><h3>Класс Fraction — работа с дробью</h3></div>
+    <div class="task-text">
+      Класс обыкновенной дроби: числитель и знаменатель. Метод toString() возвращает строку вида «a / b», метод asDecimal() — дробь десятичной записью. Оба используют шаблонные строки.
+    </div>
+    <pre class="code">class Fraction {
+  constructor(numer, denom) {
+    this.numer = numer;
+    this.denom = denom;
+  }
+  toString() {
+    return `${this.numer} / ${this.denom}`;
+  }
+  asDecimal() {
+    return (this.numer / this.denom).toFixed(2);
+  }
+}
+
+let n = +prompt("Числитель:");
+let d = +prompt("Знаменатель:");
+let f = new Fraction(n, d);
+console.log(`Дробь: ${f.toString()}`);
+console.log(`Десятичная: ${f.asDecimal()}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">constructor(numer, denom)</td><td class="line-desc">Конструктор сохраняет числитель и знаменатель в поля объекта.</td></tr>
+        <tr><td class="line-code">toString() { return \`${this.numer} / ${this.denom}\`; }</td><td class="line-desc">Метод возвращает читаемую строку дроби через шаблонную строку.</td></tr>
+        <tr><td class="line-code">asDecimal() { return (this.numer / this.denom).toFixed(2); }</td><td class="line-desc">Делит числитель на знаменатель и округляет до двух знаков через toFixed().</td></tr>
+        <tr><td class="line-code">let n = +prompt("Числитель:");</td><td class="line-desc">Унарный + превращает строку из prompt в число.</td></tr>
+        <tr><td class="line-code">let f = new Fraction(n, d);</td><td class="line-desc">Создаём экземпляр дроби.</td></tr>
+        <tr><td class="line-code">console.log(\`Дробь: ${f.toString()}\`)</td><td class="line-desc">Подставляем результат метода в шаблонную строку вывода.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Числитель</label><input type="number" id="ex1-n" value="3"></div>
+      <div class="field"><label>Знаменатель</label><input type="number" id="ex1-d" value="4"></div>
+      <button class="btn" onclick="ex1()">Проверить</button>
+    </div>
+    <div id="ex1-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 2</span><h3>Класс ShoppingCart — корзина покупок</h3></div>
+    <div class="task-text">
+      Корзина хранит список позиций в массиве items. Метод add() добавляет товар с ценой, count() возвращает число позиций, total() — общую сумму.
+    </div>
+    <pre class="code">class ShoppingCart {
+  constructor() {
+    this.items = [];
+  }
+  add(name, price) {
+    this.items.push({ name, price });
+  }
+  count() {
+    return this.items.length;
+  }
+  total() {
+    let sum = 0;
+    for (let i = 0; i < this.items.length; i++) {
+      sum += this.items[i].price;
+    }
+    return sum;
+  }
+}
+
+let cart = new ShoppingCart();
+cart.add("Монитор", 15000);
+cart.add("Клавиатура", 3500);
+cart.add("Мышь", 1200);
+console.log(`В корзине позиций: ${cart.count()}`);
+console.log(`Сумма заказа: ${cart.total()} руб.`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">this.items = [];</td><td class="line-desc">Каждая корзина начинает с пустого массива позиций.</td></tr>
+        <tr><td class="line-code">add(name, price) { this.items.push({ name, price }); }</td><td class="line-desc">Добавляет объект с полями name и price в конец массива.</td></tr>
+        <tr><td class="line-code">count() { return this.items.length; }</td><td class="line-desc">Возвращает число записей — length массива.</td></tr>
+        <tr><td class="line-code">total()</td><td class="line-desc">Проходит по всем позициям и накапливает сумму полей price.</td></tr>
+        <tr><td class="line-code">sum += this.items[i].price;</td><td class="line-desc">Прибавляет цену текущей позиции.</td></tr>
+        <tr><td class="line-code">console.log(\`В корзине позиций: ${cart.count()}\`)</td><td class="line-desc">Вывод количества через шаблонную строку.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="ex2()">Проверить</button>
+    </div>
+    <div id="ex2-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 3</span><h3>Класс Cipher — шифр Цезаря</h3></div>
+    <div class="task-text">
+      Класс шифрования Цезаря: приватный сдвиг #shift, метод encode() сдвигает код каждого символа строки и собирает зашифрованный текст. Сдвиг хранится в приватном поле и снаружи не виден.
+    </div>
+    <pre class="code">class Cipher {
+  #shift;
+  constructor(shift) { this.#shift = shift; }
+  encode(text) {
+    let out = "";
+    for (let i = 0; i < text.length; i++) {
+      out += String.fromCharCode(text.charCodeAt(i) + this.#shift);
+    }
+    return out;
+  }
+}
+
+let c = new Cipher(3);
+let msg = prompt("Сообщение:");
+console.log(`Зашифровано: ${c.encode(msg)}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">#shift;</td><td class="line-desc">Приватное поле сдвига — недоступно снаружи класса.</td></tr>
+        <tr><td class="line-code">encode(text)</td><td class="line-desc">Метод шифрования: проходит по каждому символу строки.</td></tr>
+        <tr><td class="line-code">text.charCodeAt(i)</td><td class="line-desc">Получает числовой код символа.</td></tr>
+        <tr><td class="line-code">String.fromCharCode(code + this.#shift)</td><td class="line-desc">Прибавляет сдвиг к коду и превращает обратно в символ.</td></tr>
+        <tr><td class="line-code">out += ...</td><td class="line-desc">Накопление зашифрованной строки.</td></tr>
+        <tr><td class="line-code">console.log(\`Зашифровано: ${c.encode(msg)}\`)</td><td class="line-desc">Вывод результата через шаблонную строку.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Сообщение</label><input type="text" id="ex3-text" value="Hello"></div>
+      <div class="field"><label>Сдвиг</label><input type="number" id="ex3-shift" value="3"></div>
+      <button class="btn" onclick="ex3()">Проверить</button>
+    </div>
+    <div id="ex3-trace" class="trace"></div>
+    <div class="kb-note">
+      <div class="kb-bar">Кибербезопасность</div>
+      <div class="kb-body">Шифр Цезаря — простейший пример замены символов. Он небезопасен для реальной передачи данных, но объясняет принцип сдвига кодов. Модель классов здесь показывает, как скрыть ключ (сдвиг) внутри объекта и дать наружу только метод шифрования.</div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 4</span><h3>Наследование: Car extends Transport</h3></div>
+    <div class="task-text">
+      Базовый класс Transport (скорость), дочерний Car (марка). Через super() вызывается конструктор родителя, метод describe() переопределяется и включает родительскую часть через super.describe().
+    </div>
+    <pre class="code">class Transport {
+  constructor(speed) { this.speed = speed; }
+  describe() { return `Транспорт, скорость ${this.speed} км/ч`; }
+}
+
+class Car extends Transport {
+  constructor(brand, speed) {
+    super(speed);
+    this.brand = brand;
+  }
+  describe() {
+    return `${super.describe()} → автомобиль ${this.brand}`;
+  }
+}
+
+let car = new Car("Lada", 120);
+console.log(`Описание: ${car.describe()}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">class Transport</td><td class="line-desc">Базовый класс: поле speed и метод describe().</td></tr>
+        <tr><td class="line-code">class Car extends Transport</td><td class="line-desc">Дочерний класс наследует от Transport.</td></tr>
+        <tr><td class="line-code">super(speed);</td><td class="line-desc">Вызов конструктора родителя: записывает this.speed. Идёт первым.</td></tr>
+        <tr><td class="line-code">this.brand = brand;</td><td class="line-desc">Добавляем собственное поле brand.</td></tr>
+        <tr><td class="line-code">super.describe()</td><td class="line-desc">Вызов родительского метода — возвращает строку про «Транспорт».</td></tr>
+        <tr><td class="line-code">\`${super.describe()} → автомобиль ${this.brand}\`</td><td class="line-desc">Склеиваем родительскую часть и собственное поле через шаблонную строку.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Марка</label><input type="text" id="ex4-brand" value="Lada"></div>
+      <div class="field"><label>Скорость</label><input type="number" id="ex4-speed" value="120"></div>
+      <button class="btn" onclick="ex4()">Проверить</button>
+    </div>
+    <div id="ex4-trace" class="trace"></div>
+  </div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Задача 5</span><h3>Статический метод PasswordGenerator.generate</h3></div>
+    <div class="task-text">
+      Класс-генератор паролей со статическим методом generate(length): строит случайную строку из букв и цифр. Статический метод вызывается через имя класса, а не через экземпляр.
+    </div>
+    <pre class="code">class PasswordGenerator {
+  static generate(length) {
+    let symbols = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let out = "";
+    for (let i = 0; i < length; i++) {
+      out += symbols[Math.floor(Math.random() * symbols.length)];
+    }
+    return out;
+  }
+}
+
+let len = +prompt("Длина пароля:");
+console.log(`Сгенерирован пароль: ${PasswordGenerator.generate(len)}`);</pre>
+    <div class="code-explainer">
+      <div class="explainer-title">Построчное пояснение</div>
+      <table>
+        <tr><td class="line-code">static generate(length)</td><td class="line-desc">Статический метод — принадлежит классу, вызывается как PasswordGenerator.generate(...).</td></tr>
+        <tr><td class="line-code">let symbols = "abc...0123456789";</td><td class="line-desc">Набор символов, из которых строится пароль.</td></tr>
+        <tr><td class="line-code">out += symbols[Math.floor(Math.random() * symbols.length)];</td><td class="line-desc">Случайный индекс умножает Math.random() на длину набора, Math.floor отбрасывает дробь, символ добавляется к строке.</td></tr>
+        <tr><td class="line-code">for (let i = 0; i &lt; length; i++)</td><td class="line-desc">Повторяем ровно length раз, чтобы получить строку нужной длины.</td></tr>
+        <tr><td class="line-code">console.log(\`Сгенерирован пароль: ${PasswordGenerator.generate(len)}\`)</td><td class="line-desc">Вызов статического метода через имя класса.</td></tr>
+      </table>
+    </div>
+    <div class="controls">
+      <div class="field"><label>Длина</label><input type="number" id="ex5-len" value="8"></div>
+      <button class="btn" onclick="ex5()">Проверить</button>
+    </div>
+    <div id="ex5-trace" class="trace"></div>
+    <div class="kb-note">
+      <div class="kb-bar">Кибербезопасность</div>
+      <div class="kb-body">Случайная генерация пароля — важный приём. Обратите внимание: Math.random() подходит для учебных задач, но не для криптографии. Для настоящих токенов и паролей используют криптографически стойкий crypto.getRandomValues().</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ДОМАШНЕЕ ЗАДАНИЕ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="homework"><div class="bar"></div><h2>Домашнее задание</h2></div>
+
+  <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">
+    Пять задач по аналогии с разобранными на уроке, но на другие предметные области.
+    Решения не приложены — напишите самостоятельно. Используйте классы, prompt() и шаблонные строки. Разбор — на следующем занятии.
+  </p>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Класс Rectangle</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">По аналогии с Fraction (Задача 1): класс Rectangle с полями width и height, методом area() (площадь) и периметром perimeter(). describe() возвращает строку вида «Прямоугольник 5 × 3, площадь 15».</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Класс EventLog</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">По аналогии с ShoppingCart (Задача 2): класс EventLog хранит массив событий в поле events. Метод add(level, message) добавляет запись, count() возвращает число событий. Выводите через шаблонные строки.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Класс Morse</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">По аналогии с Cipher (Задача 3): класс Morse с приватным словарём #code (строка символов в азбуке). Метод encode() заменяет каждый символ из #code на его код. Приватное поле словаря снаружи не видно.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Наследование: Boat extends Transport</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">По аналогии с Car (Задача 4): базовый Transport, дочерний Boat с полем type (вид судна). Переопределите describe() так, чтобы он включал родительскую часть через super.describe() и собственный тип.</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">5</span><h3>Статический метод idGenerator</h3><span class="task-level hard">сложная</span></div>
+      <div class="task-text">Класс IdGenerator со статическим методом next(), который возвращает следующий номер (1, 2, 3...) храня счётчик в поле static count. Вызовите Method через имя класса несколько раз и выведите номера через шаблонные строки.</div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ТЕРМИНАЛ -->
+  <!-- ============================================================ -->
+
+  <div class="section-title" id="terminal"><div class="bar"></div><h2>Запуск в терминале</h2></div>
+
+  <div class="example">
+    <div class="example-head"><span class="num">Терминал</span><h3>Как запускать код</h3></div>
+    <div class="task-text">
+      <strong>В браузере:</strong> код с <code>prompt()</code> запускается в консоли разработчика (F12).<br>
+      <strong>В Node.js:</strong> <code>prompt()</code> нет — используйте <code>readline</code> или заранее заданные данные; вывод через <code>console.log</code> и шаблонные строки работает как обычно.<br>
+      Способ запуска: <code>node имя_файла.js</code><br><br>
+      Классы, приватные поля и шаблонные строки поддерживаются обоими окружениями без настроек.
+    </div>
+  </div>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+
+</div>
+
+<script src="classes-tasks.js"></script>
+<script>
+function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+function applyTheme(theme) {
+  if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+  else { document.documentElement.removeAttribute('data-theme'); }
+  document.getElementById('theme-label').textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+}
+function toggleTheme() {
+  var next = getTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('js-theme', next);
+  applyTheme(next);
+}
+applyTheme(getTheme());
+</script>
+</body>
+</html>

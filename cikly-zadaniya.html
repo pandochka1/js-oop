@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Циклы — вопросы и задания</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="window.toggleTheme()" title="Переключить тему">
+    <span class="icon">◐</span>
+    <span id="theme-label">Тема</span>
+  </button>
+
+<div class="page">
+  <div class="page-head">
+    <div>
+      <h1>Циклы</h1>
+      <div class="subtitle">Практическое задание · Модуль 1 «Введение в JavaScript»</div>
+    </div>
+  </div>
+
+  <div class="task-header">
+    <h2>ПРАКТИЧЕСКОЕ ЗАДАНИЕ</h2>
+    <div class="task-topic">Тема: Циклы · while / do…while / for</div>
+  </div>
+
+  <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">
+    Общая <strong>постановка задачи</strong>: для каждого задания выберите подходящий цикл —
+    <strong>while / do…while / for</strong>. В некоторых задачах пригодятся знания из темы «Условный оператор».
+    Файл решения создайте сами. Запуск: <code>node task.js</code>.
+    На вопросы под заданием отвечайте письменно, объясняя выбор типа цикла.
+  </p>
+
+  <div class="section-title"><div class="bar"></div><h2>Задачи на while</h2></div>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Возведение в степень</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить число и степень (целое положительное). Возвести число в степень и вывести результат.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Возвести в степень — умножить число само на себя нужное количество раз в цикле. Не используйте Math.pow — реализуйте циклом while.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Сколько итераций потребуется для возведения в степень 3?</li>
+          <li>Что вернёт программа для степени 0? Как должна работать программа в этом случае?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Факториал</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Посчитать факториал введённого пользователем числа (5! = 1×2×3×4×5 = 120).</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Факториал — произведение чисел от 1 до N. Накопите результат умножением в переменной, начав с 1. Учтите, что 0! = 1.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Чем накопление суммы отличается от накопления произведения?</li>
+          <li>Почему начальное значение для произведения — 1, а не 0?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Делители числа</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить N и вывести все числа, на которые N делится без остатка, включая 1.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Проверяйте каждое число от 1 до N включительно: если N % i === 0 — это делитель. Можно реализовать и через while.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Почему делители всегда лежат в диапазоне от 1 до N?</li>
+          <li>Что будет, если проверить только i &lt; N (без включения N)?</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title"><div class="bar"></div><h2>Задачи на do…while</h2></div>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Правильный ответ</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Предлагать пользователю решить пример 2 + 2 × 2, пока он не ответит правильно. Помните о приоритете операций.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Ответ должен быть введён хотя бы один раз — это do…while. Условие повтора: answer !== правильный_ответ. Правильный ответ: 2 + 2 × 2 = 6.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Почему здесь do…while, а не while?</li>
+          <li>Чему равно 2 + 2 × 2 и почему (порядок операций)?</li>
+          <li>Как сравнивать введённую строку с правильным ответом?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Половина от 1000</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Делить число 1000 на 2 до тех пор, пока не получится число меньше 50. Вывести это число и сколько делений было произведено.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Первое деление обязано произойти — do…while. На каждой итерации делите число на 2 и увеличивайте счётчик делений. Условие повтора: n &gt;= 50.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Сколько минимум итераций выполнит do…while? Почему?</li>
+          <li>Сколько делений потребуется, чтобы число стало меньше 50?</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title"><div class="bar"></div><h2>Задачи на for</h2></div>
+
+  <div class="tasks-list">
+
+    <div class="task">
+      <div class="task-head"><span class="num">1</span><h3>Сумма диапазона</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Подсчитать сумму всех чисел в заданном пользователем диапазоне (от A до B).</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Границы диапазона известны заранее — используйте for с переменной-счётчиком. Накопите сумму в отдельной переменной, начиная с 0.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Почему здесь подходит цикл for, а не while?</li>
+          <li>Что будет, если A больше B? Как это учесть?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">2</span><h3>Чётные числа от 2 до N</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить N и вывести все чётные числа от 2 до N (или N−1, если N нечётное).</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Перебирайте числа и проверяйте чётность через n % 2 === 0. Либо меняйте шаг счётчика на 2, начиная с чётного числа.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Какой шаг счётчика удобнее для чётных чисел и почему?</li>
+          <li>Чем оператор % помогает в проверке чётности?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">3</span><h3>Нечётные в порядке убывания</h3><span class="task-level easy">лёгкая</span></div>
+      <div class="task-text">Запросить N и вывести нечётные числа от N до 1 в порядке убывания.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Цикл с убывающим счётчиком: for (i = N; i &gt;= 1; i--). Проверяйте нечётность через i % 2 === 1.</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Как записать шаг счётчика для убывания? Чем он отличается от возрастания?</li>
+          <li>Почему в условии стоит i &gt;= 1, а не i &gt; 1?</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="num">4</span><h3>Статистика ввода</h3><span class="task-level mid">средняя</span></div>
+      <div class="task-text">Запросить 10 чисел и подсчитать: сколько положительных, отрицательных, нулей, чётных и нечётных. Вывести статистику. Достаточно одной переменной для ввода.</div>
+      <details class="hint">
+        <summary>Подсказка</summary>
+        <div class="hint-body">Внутри цикла заведите счётчики (переменные) и увеличивайте нужный на каждой итерации в зависимости от введённого числа. Для чётности используйте if (x % 2 === 0).</div>
+      </details>
+      <div class="task-questions">
+        <div class="questions-title">Ответьте письменно</div>
+        <ol>
+          <li>Сколько счётчиков понадобится и для чего каждый?</li>
+          <li>Почему можно использовать одну переменную для ввода вместо десяти?</li>
+          <li>Как проверить «ноль» — числом или логическим значением?</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="color:var(--faint); margin-top:16px; font-size:13px;">
+    Требования: для ввода — prompt(), для вывода — console.log().
+    Каждая задача — отдельная функция в одном файле. Названия переменных осмысленные.
+  </p>
+
+  <div class="back-to-top">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var label = document.getElementById('theme-label');
+  function getTheme() { return localStorage.getItem('js-theme') || 'dark'; }
+  function applyTheme(theme) {
+    if (theme === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+    else { document.documentElement.removeAttribute('data-theme'); }
+    if (label) label.textContent = theme === 'light' ? 'Тёмная' : 'Светлая';
+  }
+  function toggleTheme() {
+    var next = getTheme() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('js-theme', next);
+    applyTheme(next);
+  }
+  applyTheme(getTheme());
+  window.toggleTheme = toggleTheme;
+})();
+</script>
+</body>
+</html>
